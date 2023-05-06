@@ -28,6 +28,7 @@ const navList: MenuItem[] = [
 #m-discover-music {
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   .nav {
     display: flex;
@@ -64,8 +65,14 @@ const navList: MenuItem[] = [
   }
 
   #content {
+    height: calc(100% - 76px);
     display: flex;
     justify-content: center;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 </style>

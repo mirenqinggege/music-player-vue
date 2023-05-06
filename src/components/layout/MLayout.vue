@@ -46,7 +46,7 @@ const fixedMenu: MenuItem[] = [
   #m-header {
     color: rgb(251, 217, 217);
     flex-shrink: 0;
-    height: 60px;
+    height: var(--header-height);
     display: flex;
     position: relative;
     background-color: var(--primary-color);
@@ -101,8 +101,9 @@ const fixedMenu: MenuItem[] = [
   }
 
   #content {
+    overflow: hidden;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - (var(--header-height) + var(--footer-height)));
     position: relative;
   }
 }

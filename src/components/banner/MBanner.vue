@@ -23,7 +23,7 @@ defineProps<Props>()
 const bannerStore = getBannerStore()
 
 const bannerItem = ref()
-const banner: Ref = ref()
+const banner = ref()
 
 let timer: NodeJS.Timer | undefined
 

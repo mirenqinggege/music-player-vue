@@ -10,3 +10,13 @@ export function AntiShake(time: number = 100) {
     }, time)
   }
 }
+
+export function objForEach<T>(obj: T, callback: (prop: string, value: any, obj?: T) => boolean | void) {
+  for (let objKey in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, objKey)) {
+      if (callback(objKey, obj[objKey], obj) === false) {
+        break
+      }
+    }
+  }
+}

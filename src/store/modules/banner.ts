@@ -43,6 +43,10 @@ const useBannerStore = defineStore('bannerStore', {
   getters: {
     getBannerList: (state: BannerStore) => state.bannerList,
     getBanners: (state: BannerStore) => state.banners
+  },
+  persist: {
+    enabled: true,
+    strategies: [{storage: localStorage}]
   }
 })
 

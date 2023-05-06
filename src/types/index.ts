@@ -1,3 +1,5 @@
 export * from './modules/menu'
 export * from './modules/banner'
 export * from './modules/response'
+export * from './modules/song-list'
+export * from './modules/user-info'

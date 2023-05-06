@@ -9,17 +9,17 @@ const discoverMusicChild: Array<RouteRecordRaw> = [
   {
     name: 'list',
     path: 'list',
-    component: () => import('@/pages/discover/MRecommend.vue')
+    component: () => import('@/pages/temp.vue')
   },
   {
     name: 'playlist',
     path: 'playlist',
-    component: () => import('@/pages/discover/MRecommend.vue')
+    component: () => import('@/pages/temp.vue')
   },
   {
     name: 'customize',
     path: 'customize',
-    component: () => import('@/pages/discover/MRecommend.vue')
+    component: () => import('@/pages/temp.vue')
   }
 ]
 
@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'home',
     path: '/',
-    redirect: {path: '/index'},
+    redirect: {path: '/discover'},
     component: () => import('@/components/layout/MLayout.vue'),
     children
   }
