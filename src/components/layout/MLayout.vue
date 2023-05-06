@@ -16,6 +16,15 @@
             </router-link>
           </template>
         </div>
+        <div id="my-song-list">
+          <span class="title">我的音乐</span>
+
+          <template v-for="item in playlist" :key="String(item.id)">
+            <router-link to="" custom v-slot="{navigate, isActive}">
+              <div :class="isActive ? ['menu-item', 'active'] : ['menu-item']" @click="navigate">{{ item.name }}</div>
+            </router-link>
+          </template>
+        </div>
       </div>
       <div id="content">
         <router-view/>
@@ -29,11 +38,29 @@
 import MStepControl from '@/components/layout/MStepControl.vue'
 import MSearchInput from '@/components/layout/MSearchInput.vue'
 import MWindowControl from '@/components/layout/MWindowControl.vue'
-import {MenuItem} from '@/types'
+import {MenuItem, PlayList} from '@/types'
+import {getMySongListStore} from '@/store'
+import {computed, ComputedRef, onMounted} from 'vue'
+import {getLoginUserInfo} from '@/api/user'
 
 const fixedMenu: MenuItem[] = [
-  {routeName: 'discover', label: '发现音乐', key: 'fixed-menu-item-discover'}
+  {routeName: 'discover', label: '发现音乐', key: 'fixed-menu-item-discover'},
+  {routeName: 'podcasts', label: '播客', key: 'fixed-menu-item-podcasts'},
+  {routeName: 'video', label: '视频', key: 'fixed-menu-item-video'},
+  {routeName: 'concern', label: '关注', key: 'fixed-menu-item-concern'},
+  {routeName: 'live', label: '直播', key: 'fixed-menu-item-live'},
+  {routeName: 'private-fm', label: '私人FM', key: 'fixed-menu-item-private-fm'}
 ]
+
+const mySongListStore = getMySongListStore()
+
+const playlist: ComputedRef<PlayList[]> = computed(() => mySongListStore.getMyCreatedPlaylist)
+
+onMounted(() => {
+  if (playlist.value.length === 0) {
+    mySongListStore.fetchMySongList()
+  }
+})
 </script>
 
 <style lang="less" scoped>
@@ -105,6 +132,19 @@ const fixedMenu: MenuItem[] = [
     width: 100%;
     height: calc(100vh - (var(--header-height) + var(--footer-height)));
     position: relative;
+  }
+
+  #my-song-list {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+
+    .title {
+      padding: 5px;
+      font-size: 14px;
+      color: rgb(159, 159, 159);
+    }
   }
 }
 

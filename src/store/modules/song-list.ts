@@ -1,7 +1,8 @@
 import {defineStore} from 'pinia'
 import {store} from '@/store'
 import {getRecommendSongList} from '@/api/recommend'
-import {SongList} from '@/types'
+import {PlayList, SongList} from '@/types'
+import {getUserPlayList} from '@/api/user'
 
 interface RecommendSongListStore {
   updateTime?: Date
@@ -29,4 +30,34 @@ const useRecommendSongListStore = defineStore('recommendSongListStore', {
 
 export function getRecommendSongListStore() {
   return useRecommendSongListStore(store)
+}
+
+interface MySongListStore {
+  playlists: PlayList[]
+}
+
+const useMySongListStore = defineStore('mySongListStore', {
+  state(): MySongListStore {
+    return {
+      playlists: []
+    }
+  },
+  actions: {
+    async fetchMySongList() {
+      return getUserPlayList().then(({playlist}) => {
+        this.playlists = playlist
+      })
+    },
+    async clearMySongList() {
+      this.playlists = []
+    }
+  },
+  getters: {
+    getMyCreatedPlaylist: (state: MySongListStore) => state.playlists.filter(({subscribed}) => !subscribed),
+    getMySubscribedPlaylist: (state: MySongListStore) => state.playlists.filter(({subscribed}) => subscribed)
+  }
+})
+
+export function getMySongListStore() {
+  return useMySongListStore(store)
 }

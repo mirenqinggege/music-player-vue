@@ -35,6 +35,31 @@ const children: Array<RouteRecordRaw> = [
     redirect: {name: 'recommend'},
     component: () => import('@/pages/discover/MDiscoverMusic.vue'),
     children: discoverMusicChild
+  },
+  {
+    name: 'podcasts',
+    path: 'podcasts',
+    component: () => import('@/pages/temp.vue')
+  },
+  {
+    name: 'video',
+    path: 'video',
+    component: () => import('@/pages/temp.vue')
+  },
+  {
+    name: 'concern',
+    path: 'concern',
+    component: () => import('@/pages/temp.vue')
+  },
+  {
+    name: 'live',
+    path: 'live',
+    component: () => import('@/pages/temp.vue')
+  },
+  {
+    name: 'private-fm',
+    path: 'private-fm',
+    component: () => import('@/pages/temp.vue')
   }
 ]
 

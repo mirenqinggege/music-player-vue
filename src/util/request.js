@@ -160,7 +160,6 @@ const createRequest = (method, url, data = {}, options) => {
         responseType: 'arraybuffer',
       }
     }
-    console.debug('request', settings)
     axios(settings)
       .then((res) => {
         const body = res.data

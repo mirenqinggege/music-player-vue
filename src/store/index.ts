@@ -15,4 +15,6 @@ export * from './modules/song-list'
 
 export * from './modules/cookie'
 
+export * from './modules/user'
+
 export default store
