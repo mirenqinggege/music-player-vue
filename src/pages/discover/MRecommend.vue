@@ -1,6 +1,11 @@
 <template>
   <div class="m-recommend">
     <m-banner ref="mBanner" :banner-list="bannerList"/>
+    <div class="list-content">
+      <m-group label="推荐歌单">
+        1
+      </m-group>
+    </div>
   </div>
 </template>
 
@@ -9,6 +14,7 @@ import MBanner from '@/components/banner/MBanner.vue'
 import {BannerItem} from '@/types'
 import {computed, ComputedRef, onMounted, ref} from 'vue'
 import {getBannerStore} from '@/store'
+import MGroup from '@/components/group/MGroup.vue'
 
 const bannerStore = getBannerStore()
 
@@ -27,6 +33,12 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .m-recommend {
-  width: 1200px;
+  min-width: 820px;
+  max-width: 1000px;
+
+  .list-content {
+    padding: 20px;
+    box-sizing: border-box;
+  }
 }
 </style>

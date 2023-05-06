@@ -12,8 +12,8 @@ async function createWindow() {
   const config: Electron.BrowserWindowConstructorOptions = {
     frame: false,
     show: false,
-    width: 1400,
-    minWidth: 1400,
+    width: 1020,
+    minWidth: 1020,
     minHeight: 670,
     webPreferences: {
       nodeIntegration: true,
