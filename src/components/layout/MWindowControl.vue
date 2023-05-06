@@ -35,11 +35,11 @@
 import {ipcRenderer} from 'electron'
 
 function handlerMinimize() {
-
+  ipcRenderer.invoke('minimize')
 }
 
 function handlerMaximize() {
-
+  ipcRenderer.invoke('maximize')
 }
 
 function handlerExit() {

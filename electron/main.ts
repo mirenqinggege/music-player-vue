@@ -2,8 +2,11 @@ import {app, BrowserWindow, Menu, ipcMain, globalShortcut} from 'electron'
 import {join} from 'path'
 import request from '../src/util/request.js'
 import Accelerator = Electron.Accelerator
+import {main} from '@popperjs/core'
 
 Menu.setApplicationMenu(null)
+
+let mainWin: BrowserWindow
 
 async function createWindow() {
   const config: Electron.BrowserWindowConstructorOptions = {
@@ -30,10 +33,22 @@ async function createWindow() {
 }
 
 app.whenReady().then(async () => {
-  const window = await createWindow()
-  return window.loadURL(process.env.VITE_DEV_SERVER_URL)
+  mainWin = await createWindow()
+  return mainWin.loadURL(process.env.VITE_DEV_SERVER_URL)
 }).then(() => {
   console.log('success')
+})
+
+ipcMain.handle('minimize', async () => {
+  mainWin.minimize()
+})
+
+ipcMain.handle('maximize', async () => {
+  if (mainWin.isMaximized()) {
+    mainWin.restore()
+  } else {
+    mainWin.maximize()
+  }
 })
 
 ipcMain.handle('exit', async () => {

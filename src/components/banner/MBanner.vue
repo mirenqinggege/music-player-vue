@@ -117,6 +117,7 @@ defineExpose({
 #m-banner {
   position: relative;
   width: 100%;
+  height: 200px;
 
   .banner-item {
     position: absolute;
