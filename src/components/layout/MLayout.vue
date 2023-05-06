@@ -21,7 +21,7 @@
 
           <template v-for="item in playlist" :key="String(item.id)">
             <router-link to="" custom v-slot="{navigate, isActive}">
-              <div :class="isActive ? ['menu-item', 'active'] : ['menu-item']" @click="navigate">{{ item.name }}</div>
+              <div :class="isActive ? ['playlist', 'active'] : ['menu-item']" @click="navigate">{{ item.name }}</div>
             </router-link>
           </template>
         </div>
@@ -145,6 +145,10 @@ onMounted(() => {
       font-size: 14px;
       color: rgb(159, 159, 159);
     }
+  }
+
+  .playlist {
+
   }
 }
 

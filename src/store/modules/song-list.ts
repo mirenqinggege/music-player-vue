@@ -55,6 +55,9 @@ const useMySongListStore = defineStore('mySongListStore', {
   getters: {
     getMyCreatedPlaylist: (state: MySongListStore) => state.playlists.filter(({subscribed}) => !subscribed),
     getMySubscribedPlaylist: (state: MySongListStore) => state.playlists.filter(({subscribed}) => subscribed)
+  },
+  persist: {
+    enabled: true
   }
 })
 

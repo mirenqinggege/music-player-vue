@@ -25,6 +25,9 @@ const useUserStore = defineStore('userStore', {
   },
   getters: {
     getLoginUser: (state: UserStore) => state.loginUser
+  },
+  persist: {
+    enabled: true
   }
 })
 
