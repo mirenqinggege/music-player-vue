@@ -1,5 +1,7 @@
-import {app, BrowserWindow, Menu, ipcMain} from 'electron'
+import {app, BrowserWindow, Menu, ipcMain, globalShortcut} from 'electron'
 import {join} from 'path'
+import request from '../src/util/request.js'
+import Accelerator = Electron.Accelerator
 
 Menu.setApplicationMenu(null)
 
@@ -20,6 +22,9 @@ async function createWindow() {
   browserWindow.on('ready-to-show', () => {
     browserWindow.show()
     browserWindow.webContents.toggleDevTools()
+    globalShortcut.register(<Accelerator>"F12", () => {
+      browserWindow.webContents.toggleDevTools()
+    })
   })
   return browserWindow
 }
@@ -36,3 +41,5 @@ ipcMain.handle('exit', async () => {
     app.quit()
   }
 })
+
+ipcMain.handle('request', async (event, args) => request(...args))
