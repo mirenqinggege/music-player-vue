@@ -22,8 +22,9 @@
 
 <script lang="ts" setup>
 import MLoginModal from '@/components/user/MLoginModal.vue'
-import {ref, Ref, watchPostEffect} from 'vue'
+import {computed, ComputedRef, ref, Ref, watchPostEffect} from 'vue'
 import {getCookieStore, getUserStore} from '@/store'
+import {UserInfo} from '@/types'
 
 
 const show: Ref<boolean> = ref(false)
@@ -35,7 +36,7 @@ function handlerShowLogin() {
 const cookieStore = getCookieStore()
 const userStore = getUserStore()
 
-const loginUser = userStore.getLoginUser
+const loginUser: ComputedRef<UserInfo | undefined> = computed(() => userStore.getLoginUser)
 
 watchPostEffect(() => {
   const hasCookie = cookieStore.hasCookie
@@ -64,7 +65,6 @@ watchPostEffect(() => {
     background-color: rgb(244, 244, 244);
     border-radius: 50%;
     box-sizing: border-box;
-    padding: 5px;
     overflow: hidden;
 
     img {
