@@ -10,9 +10,28 @@ interface RequestOption {
 }
 
 export default function (method: 'GET' | 'POST', url: string, data: any, options: RequestOption): Promise<Response> {
-  const cookie = getCookieStore().getCookieToString
+  const cookie = getCookieStore().getCookie
   if (options.cookie === undefined) {
     options.cookie = cookie
   }
-  return ipcRenderer.invoke('request', [method, url, data, options]).then(({body}) => body)
+  return new Promise<Response>((resolve, reject) => {
+    ipcRenderer.invoke('request', [method, url, data, options])
+      .then((data) => {
+        const {body: {code}, cookie} = data
+        data.body.cookie = cookie
+        if (code === 200) {
+          resolve(data.body)
+        } else {
+          // isNotLogin(code)
+          reject(data.body)
+        }
+      })
+  })
+}
+
+function isNotLogin(code: number): boolean {
+  if (code === 301) {
+    getCookieStore().clearCookie().then()
+  }
+  return code === 301
 }

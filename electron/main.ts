@@ -1,8 +1,7 @@
-import {app, BrowserWindow, Menu, ipcMain, globalShortcut} from 'electron'
+import {app, BrowserWindow, globalShortcut, ipcMain, Menu, session} from 'electron'
 import {join} from 'path'
 import request from '../src/util/request.js'
 import Accelerator = Electron.Accelerator
-import {main} from '@popperjs/core'
 
 Menu.setApplicationMenu(null)
 
@@ -22,10 +21,11 @@ async function createWindow() {
     }
   }
   const browserWindow: BrowserWindow = new BrowserWindow(config)
+  session.defaultSession.loadExtension('/home/zkh/project/devtools-6.4.5/packages/shell-chrome', {allowFileAccess: true}).then()
   browserWindow.on('ready-to-show', () => {
     browserWindow.show()
     browserWindow.webContents.toggleDevTools()
-    globalShortcut.register(<Accelerator>"F12", () => {
+    globalShortcut.register(<Accelerator>'F12', () => {
       browserWindow.webContents.toggleDevTools()
     })
   })
@@ -57,4 +57,12 @@ ipcMain.handle('exit', async () => {
   }
 })
 
-ipcMain.handle('request', async (event, args) => request(...args))
+ipcMain.handle('request', (event, args) => new Promise((resolve) => {
+  const promise: Promise<any> = request(...args)
+  promise.then((data) => {
+    resolve(data)
+  })
+  promise.catch(err => {
+    resolve(err)
+  })
+}))

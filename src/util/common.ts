@@ -20,3 +20,9 @@ export function objForEach<T>(obj: T, callback: (prop: string, value: any, obj?:
     }
   }
 }
+
+
+export function toHump(str: string): string {
+  return str.toLowerCase()
+    .replace(/[_-](\w)/g, (all, char) => char.toUpperCase())
+}

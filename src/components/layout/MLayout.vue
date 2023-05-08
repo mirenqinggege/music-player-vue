@@ -4,8 +4,11 @@
       <div id="logo-wrapper"></div>
       <m-step-control/>
       <m-search-input/>
-      <div id="drag-area"></div>
-      <m-window-control/>
+      <div id="drag-area">
+        <div class="drag"></div>
+        <m-user-profile/>
+        <m-window-control/>
+      </div>
     </div>
     <div class="m-layout">
       <div id="side">
@@ -41,7 +44,7 @@ import MWindowControl from '@/components/layout/MWindowControl.vue'
 import {MenuItem, PlayList} from '@/types'
 import {getMySongListStore} from '@/store'
 import {computed, ComputedRef, onMounted} from 'vue'
-import {getLoginUserInfo} from '@/api/user'
+import MUserProfile from '@/components/user/MUserProfile.vue'
 
 const fixedMenu: MenuItem[] = [
   {routeName: 'discover', label: '发现音乐', key: 'fixed-menu-item-discover'},
@@ -84,18 +87,32 @@ onMounted(() => {
     }
 
     #drag-area {
-      -webkit-app-region: drag;
-      width: calc(100% - 630px);
+      display: flex;
+      width: 100%;
+
+      .drag {
+        width: 100%;
+        -webkit-app-region: drag;
+      }
+
+      :nth-of-type(.drag) {
+        flex-shrink: 0;
+      }
     }
   }
 
   #side {
+    overflow: auto;
     height: 100%;
     flex-shrink: 0;
     width: var(--side-width);
     border-right: 1px solid var(--primary-color-border);
     display: flex;
     flex-direction: column;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .fixed {
       display: flex;
@@ -130,7 +147,7 @@ onMounted(() => {
   #content {
     overflow: hidden;
     width: 100%;
-    height: calc(100vh - (var(--header-height) + var(--footer-height)));
+    height: 100%;
     position: relative;
   }
 
@@ -145,6 +162,11 @@ onMounted(() => {
       font-size: 14px;
       color: rgb(159, 159, 159);
     }
+
+    .playlist {
+      font-size: 15px;
+      padding: 5px;
+    }
   }
 
   .playlist {
@@ -154,5 +176,9 @@ onMounted(() => {
 
 .m-layout.vertical {
   flex-direction: column;
+}
+
+.m-layout:nth-child(2) {
+  height: calc(100vh - (var(--footer-height) + var(--header-height)));
 }
 </style>

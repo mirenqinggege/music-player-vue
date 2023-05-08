@@ -1,9 +1,9 @@
 import {defineStore} from 'pinia'
 import {store} from '@/store'
-import {objForEach} from '@/util/common'
+import {toHump} from '@/util/common'
 
 interface CookieStore {
-  cookie?: Cookie[]
+  cookie?: string
 }
 
 interface Cookie {
@@ -15,75 +15,20 @@ interface Cookie {
 const useCookieStore = defineStore('cookieStore', {
   state(): CookieStore {
     return {
-      cookie: []
+      cookie: undefined
     }
   },
   actions: {
-    async setCookie(cookie: Cookie[] | string | object): Promise<void> {
-      if (typeof cookie === 'string') {
-        this.cookie = cookie.split(';').map((str) => {
-          const strings = str.split('=')
-          return {
-            name: strings[0],
-            value: strings[1]?.trim(),
-            equals(obj) {
-              return this.name === obj.name
-            }
-          }
-        })
-      } else if (Array.isArray(cookie)) {
-        this.cookie = cookie
-      } else if (typeof cookie === 'object') {
-        this.cookie = []
-        objForEach(cookie, (name, value) => {
-          this.cookie?.push({
-            name, value, equals(obj) {
-              return this.name === obj.name
-            }
-          })
-        })
-      } else {
-      }
+    async setCookie(cookie: string): Promise<void> {
+      this.cookie = cookie
     },
-    async addCookie(cookie: Cookie | Cookie[] | string, replace: boolean = true): Promise<void> {
-      if (Array.isArray(cookie)) {
-        this.cookie?.forEach((value, index: number) => {
-          let i = -1
-          cookie.forEach((value1, index1) => {
-            if (value.equals(value1)) {
-              i = index1
-            }
-          })
-          if (i !== -1) {
-            this.cookie?.splice(index, 1, cookie[i])
-            cookie.splice(i, 1)
-          }
-        })
-        this.cookie?.push(...cookie)
-      } else if (typeof cookie === 'object') {
-        return this.addCookie([cookie])
-      } else {
-        const cookies: string[] = cookie.split(';')
-        const cookieArr: Cookie[] = cookies.map(v => {
-          const str: string[] = v.split('=')
-          const cookie1: Cookie = {
-            name: str[0].trim(),
-            value: str[1]?.trim(),
-            equals(obj) {
-              return this.name === obj.name
-            }
-          }
-          return cookie1
-        })
-        return this.addCookie(cookieArr)
-      }
+    async clearCookie(): Promise<void> {
+      this.cookie = undefined
     }
   },
   getters: {
-    getCookieToString: (state: CookieStore) => state
-      .cookie?.map(({name, value}) => (`${name}=${value}`))
-      .join(';'),
-    getCookie: (state: CookieStore) => state.cookie
+    getCookie: (state: CookieStore) => state.cookie,
+    hasCookie: (state: CookieStore) => 0 < state.cookie?.length
   },
   persist: {
     enabled: true,
@@ -91,6 +36,30 @@ const useCookieStore = defineStore('cookieStore', {
   }
 })
 
+function parse(str: string): Cookie {
+  const obj = {
+    name: '',
+    value: '',
+    equals(obj) {
+      return this.name === obj.name
+    }
+  }
+  str.split(';').forEach((kOfv, index) => {
+    const [prop, value] = kOfv.split('=')
+    if (index === 0) {
+      obj.name = toHump(prop)?.trim()
+      obj.value = value?.trim()
+    } else {
+      obj[toHump(prop)?.trim()] = value?.trim()
+    }
+  })
+  return obj
+}
+
 export function getCookieStore() {
   return useCookieStore(store)
+}
+
+export function getCookieByName(cookies: Cookie[], name: string) {
+  return cookies.find(v => v.name === name)
 }

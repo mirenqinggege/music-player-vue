@@ -52,8 +52,6 @@ function handlerExit() {
 .m-window-control {
   display: flex;
   align-items: center;
-  position: absolute;
-  right: 0;
   height: 100%;
   margin-right: 10px;
 
