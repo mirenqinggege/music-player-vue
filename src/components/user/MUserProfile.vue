@@ -18,7 +18,7 @@
     </div>
     <m-user-control v-model:show="userControlShow"/>
   </div>
-  <m-login-modal v-model:show="loginShow"/>
+  <m-login-modal @login-success="handlerLoginSuccess" v-model:show="loginShow"/>
 </template>
 
 <script lang="ts" setup>
@@ -31,6 +31,12 @@ import {UserInfo} from '@/types'
 
 const loginShow: Ref<boolean> = ref(false)
 const userControlShow: Ref<boolean> = ref(false)
+
+interface Emits {
+  (event: 'reload'): void
+}
+
+const emits = defineEmits<Emits>()
 
 
 function handlerShowLogin() {
@@ -54,6 +60,11 @@ watchPostEffect(() => {
     userStore.fetchUserInfo()
   }
 })
+
+function handlerLoginSuccess() {
+  console.log('login success')
+  emits('reload')
+}
 
 </script>
 

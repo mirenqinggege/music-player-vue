@@ -6,7 +6,7 @@
       <m-search-input/>
       <div id="drag-area">
         <div class="drag"></div>
-        <m-user-profile/>
+        <m-user-profile @reload="handlerReload"/>
         <m-window-control/>
       </div>
     </div>
@@ -69,9 +69,13 @@ const playlist: ComputedRef<PlayList[]> = computed(() => mySongListStore.getMyCr
 
 onMounted(() => {
   if (playlist.value.length === 0) {
-    mySongListStore.fetchMySongList()
+    handlerReload()
   }
 })
+
+function handlerReload() {
+  mySongListStore.fetchMySongList()
+}
 </script>
 
 <style lang="less" scoped>

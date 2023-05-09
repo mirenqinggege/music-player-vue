@@ -61,7 +61,7 @@
 <script lang="ts" setup>
 import {reactive, ref, Ref, watchPostEffect} from 'vue'
 import {checkQr, getQrcodeKey, getQrcodeUrl} from '@/api/login'
-import {getCookieByName, getCookieStore} from '@/store'
+import {getCookieStore} from '@/store'
 import {UnwrapNestedRefs} from '@vue/reactivity'
 
 const qrcodeLogin: Ref<boolean> = ref(true)
@@ -90,7 +90,7 @@ const props = defineProps<Props>()
 
 interface Emits {
   (event: 'update:show', value: boolean): void
-
+  (event: 'loginSuccess'): void
   (event: 'close'): boolean | undefined
 }
 
@@ -110,7 +110,8 @@ const authorizing: Ref<boolean> = ref(false)
 let interval: NodeJS.Timer | undefined
 
 watchPostEffect(() => {
-  if (props.show && qrcodeLogin.value) {
+  const hasCookie = cookieStore.hasCookie
+  if (props.show && qrcodeLogin.value && !hasCookie) {
     getQrcodeKey()
       .then(({unikey}) => {
         if (interval !== undefined) {
@@ -125,7 +126,7 @@ watchPostEffect(() => {
             alert(data.message)
             return cookieStore.setCookie(data.cookie)
           }).then(() => {
-
+            emits('login-success')
             handlerClose()
           }).catch(({code, message}) => {
             console.log(code, message)

@@ -21,7 +21,7 @@
           <path
             d="M938.666667 746.666667c0 121.6-183.466667 213.333333-426.666667 213.333333S85.333333 868.266667 85.333333 746.666667V277.333333C85.333333 155.733333 268.8 64 512 64s426.666667 91.733333 426.666667 213.333333v469.333334zM170.666667 746.666667c0 51.2 132.266667 128 341.333333 128s341.333333-76.8 341.333333-128v-104.533334c-76.8 51.2-198.4 83.2-341.333333 83.2s-264.533333-32-341.333333-83.2V746.666667z m0-339.2V512c0 51.2 132.266667 128 341.333333 128s341.333333-76.8 341.333333-128v-104.533333c-76.8 51.2-198.4 83.2-341.333333 83.2s-264.533333-32-341.333333-83.2zM512 149.333333c-209.066667 0-341.333333 76.8-341.333333 128s132.266667 128 341.333333 128 341.333333-76.8 341.333333-128-132.266667-128-341.333333-128z"></path>
         </svg>
-        {{ userDetail?.pcSign ? '已签到' : '签到'}}
+        {{ userDetail?.pcSign ? '已签到' : '签到' }}
       </button>
     </div>
     <div class="user-options">
@@ -172,7 +172,7 @@
 
 <script lang="ts" setup>
 import {computed, ComputedRef} from 'vue'
-import {getCookieStore, getUserStore} from '@/store'
+import {getCookieStore, getMySongListStore, getUserStore} from '@/store'
 import {UserDetail} from '@/types'
 import {daily, logout} from '@/api/user'
 
@@ -183,13 +183,14 @@ interface Props {
 defineProps<Props>()
 
 interface Emits {
-  (event: 'close', value: boolean): void
+  (event: 'update:show', value: boolean): void
 }
 
 const emits = defineEmits<Emits>()
 
 const userStore = getUserStore()
 const cookieStore = getCookieStore()
+const mySongListStore = getMySongListStore()
 
 const userDetail: ComputedRef<UserDetail | undefined> = computed(() => userStore.getUserDetail)
 
@@ -204,11 +205,12 @@ function handlerDaily() {
 
 function handlerLogout() {
   logout()
-    .then(() => cookieStore.clearCookie)
+    .then(() => cookieStore.clearCookie())
     .then(() => userStore.clearUserInfo())
+    .then(() => mySongListStore.clearMySongList())
     .then(() => {
       alert('退出成功')
-      emits('close', false)
+      emits('update:show', false)
     })
     .catch((err) => {
       alert(err)

@@ -20,7 +20,7 @@ const useCookieStore = defineStore('cookieStore', {
       }
     },
     async clearCookie(): Promise<void> {
-      this.cookie = ''
+      this.cookie = undefined
     }
   },
   getters: {
@@ -29,7 +29,7 @@ const useCookieStore = defineStore('cookieStore', {
   },
   persist: {
     enabled: true,
-    strategies: [{key: 'cookieStore1', storage: localStorage}]
+    strategies: [{key: 'cookieStore', storage: localStorage}]
   }
 })
 
