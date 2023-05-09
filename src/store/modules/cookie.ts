@@ -6,12 +6,6 @@ interface CookieStore {
   cookie?: string
 }
 
-interface Cookie {
-  name: string
-  value?: string
-  equals: (obj: Cookie) => boolean
-}
-
 const useCookieStore = defineStore('cookieStore', {
   state(): CookieStore {
     return {
@@ -19,8 +13,12 @@ const useCookieStore = defineStore('cookieStore', {
     }
   },
   actions: {
-    async setCookie(cookie: string): Promise<void> {
-      this.cookie = cookie
+    async setCookie(cookie: string | string[]): Promise<void> {
+      if (Array.isArray(cookie)) {
+        this.cookie = cookie.join('; ')
+      } else {
+        this.cookie = cookie
+      }
     },
     async clearCookie(): Promise<void> {
       this.cookie = undefined
@@ -32,34 +30,10 @@ const useCookieStore = defineStore('cookieStore', {
   },
   persist: {
     enabled: true,
-    strategies: [{storage: localStorage}]
+    strategies: [{key: 'cookieStore1', storage: localStorage}]
   }
 })
 
-function parse(str: string): Cookie {
-  const obj = {
-    name: '',
-    value: '',
-    equals(obj) {
-      return this.name === obj.name
-    }
-  }
-  str.split(';').forEach((kOfv, index) => {
-    const [prop, value] = kOfv.split('=')
-    if (index === 0) {
-      obj.name = toHump(prop)?.trim()
-      obj.value = value?.trim()
-    } else {
-      obj[toHump(prop)?.trim()] = value?.trim()
-    }
-  })
-  return obj
-}
-
 export function getCookieStore() {
   return useCookieStore(store)
-}
-
-export function getCookieByName(cookies: Cookie[], name: string) {
-  return cookies.find(v => v.name === name)
 }

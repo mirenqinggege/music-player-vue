@@ -1,8 +1,8 @@
 <template>
   <div class="m-user-profile">
     <div class="profile">
-      <img v-if="!cookieStore.hasCookie" src="@/assets/userProfile.png" alt=""/>
-      <img v-if="loginUser !== undefined" :src="loginUser.avatarUrl" :alt="loginUser.nickname">
+      <img v-if="!hasCookie" src="@/assets/userProfile.png" alt=""/>
+      <img v-if="hasCookie" :src="loginUser?.avatarUrl" :alt="loginUser?.nickname">
     </div>
     <div v-if="!cookieStore.hasCookie" class="login-please" @click.stop="handlerShowLogin">
       请登录
@@ -37,6 +37,7 @@ const cookieStore = getCookieStore()
 const userStore = getUserStore()
 
 const loginUser: ComputedRef<UserInfo | undefined> = computed(() => userStore.getLoginUser)
+const hasCookie: ComputedRef<boolean> = computed(() => cookieStore.hasCookie)
 
 watchPostEffect(() => {
   const hasCookie = cookieStore.hasCookie

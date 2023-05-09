@@ -1,3 +1,5 @@
+import {valueEquals} from 'element-plus'
+
 export function AntiShake(time: number = 100) {
   let timer: NodeJS.Timer | undefined
   return (callback: Function) => {
@@ -25,4 +27,14 @@ export function objForEach<T>(obj: T, callback: (prop: string, value: any, obj?:
 export function toHump(str: string): string {
   return str.toLowerCase()
     .replace(/[_-](\w)/g, (all, char) => char.toUpperCase())
+}
+
+export function getCookieFromStr(cookie: string, name: string): string {
+  const strings = cookie.split(';')
+  const s = strings.find(value => value.trim().startsWith(name))
+  if (s) {
+    const [key, value] = s.split('=')
+    return value
+  }
+  return ''
 }

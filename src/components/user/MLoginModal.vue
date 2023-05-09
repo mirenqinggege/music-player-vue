@@ -123,10 +123,9 @@ watchPostEffect(() => {
             interval = undefined
             console.log(data)
             alert(data.message)
-            cookieStore.setCookie(data.cookie).then(() => {
-              const cookie = cookieStore.getCookie
-              console.log(getCookieByName(cookie || [], '_csrf'))
-            })
+            return cookieStore.setCookie(data.cookie)
+          }).then(() => {
+
             handlerClose()
           }).catch(({code, message}) => {
             console.log(code, message)
