@@ -1,5 +1,6 @@
 <template>
   <div class="m-window-control">
+    <div class="split-line"></div>
     <button @click="handlerMinimize">
       <svg fill="currentColor" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
            width="32" height="32">
@@ -54,6 +55,7 @@ function handlerExit() {
   align-items: center;
   height: 100%;
   margin-right: 10px;
+  margin-left: 20px;
 
   button {
     background-color: transparent;
@@ -65,6 +67,11 @@ function handlerExit() {
       color: white;
       text-shadow: 0 0 2px white;
     }
+  }
+
+  .split-line {
+    width: 1px;
+    height: 30%;
   }
 }
 </style>

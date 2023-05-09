@@ -40,6 +40,7 @@ function handlerDetail() {
     font-size: 24px;
     font-weight: bold;
     line-height: 1.5;
+    margin-bottom: 10px;
 
     .more {
       position: relative;

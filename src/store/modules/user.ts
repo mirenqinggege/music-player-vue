@@ -1,22 +1,27 @@
 import {defineStore} from 'pinia'
-import {UserInfo} from '@/types'
-import {getLoginUserInfo} from '@/api/user'
+import {UserInfo, UserDetail} from '@/types'
+import {getLoginUserInfo, getUserDetail} from '@/api/user'
 import {store} from '@/store'
 
 interface UserStore {
   loginUser?: UserInfo
+  userDetail?: UserDetail
 }
 
 const useUserStore = defineStore('userStore', {
   state(): UserStore {
     return {
-      loginUser: undefined
+      loginUser: undefined,
+      userDetail: undefined
     }
   },
   actions: {
     async fetchUserInfo(): Promise<void> {
       return getLoginUserInfo().then(({profile}) => {
         this.loginUser = profile
+        return getUserDetail(profile.userId)
+      }).then((userDetail) => {
+        this.userDetail = userDetail
       })
     },
     async clearUserInfo(): Promise<void> {
@@ -24,7 +29,8 @@ const useUserStore = defineStore('userStore', {
     }
   },
   getters: {
-    getLoginUser: (state: UserStore) => state.loginUser
+    getLoginUser: (state: UserStore) => state.loginUser,
+    getUserDetail: (state: UserStore) => state.userDetail
   },
   persist: {
     enabled: true

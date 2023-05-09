@@ -1,5 +1,5 @@
 import request from '@/api/request'
-import {PlayList, Response, UserInfo} from '@/types'
+import {PlayList, Response, UserInfo, UserDetail} from '@/types'
 import {getUserStore} from '@/store'
 
 interface LoginUserInfoResponse extends Response {
@@ -15,6 +15,12 @@ export function getLoginUserInfo(): Promise<LoginUserInfoResponse> {
     {},
     {crypto: 'weapi'}
   )
+}
+
+interface UserDetails extends Response, UserDetail {}
+
+export function getUserDetail(uid: number): Promise<UserDetails> {
+  return request('POST', `https://music.163.com/weapi/v1/user/detail/${uid}`, {}, {crypto: 'weapi'})
 }
 
 interface UserPlayListResponse extends Response {
