@@ -2,7 +2,7 @@ import {ipcRenderer} from 'electron'
 import {Response} from '@/types'
 import {getCookieStore} from '@/store'
 
-interface RequestOption {
+interface RequestOption extends Record<string, any>{
   cookie?: string | object
   crypto: 'weapi' | 'linuxapi' | 'eapi' | string
   proxy?: string

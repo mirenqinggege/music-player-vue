@@ -1,5 +1,5 @@
 import request from '@/api/request'
-import {PlayList, Response, UserInfo, UserDetail} from '@/types'
+import {PlayList, Response, UserDetail, UserInfo} from '@/types'
 import {getUserStore} from '@/store'
 
 interface LoginUserInfoResponse extends Response {
@@ -17,7 +17,8 @@ export function getLoginUserInfo(): Promise<LoginUserInfoResponse> {
   )
 }
 
-interface UserDetails extends Response, UserDetail {}
+interface UserDetails extends Response, UserDetail {
+}
 
 export function getUserDetail(uid: number): Promise<UserDetails> {
   return request('POST', `https://music.163.com/weapi/v1/user/detail/${uid}`, {}, {crypto: 'weapi'})
@@ -47,4 +48,17 @@ export async function getUserPlayList(): Promise<UserPlayListResponse> {
     },
     {crypto: 'weapi'}
   )
+}
+
+interface DailyResponse extends Response {
+  point?: number
+  msg?: string
+}
+
+export function daily(): Promise<DailyResponse> {
+  return request('POST', 'https://music.163.com/weapi/point/dailyTask', {type: 0}, {crypto: 'weapi'})
+}
+
+export function logout(): Promise<Response> {
+  return request('POST', 'https://music.163.com/weapi/logout', {}, {crypto: 'weapi', ua: 'pc'})
 }

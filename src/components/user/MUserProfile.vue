@@ -4,10 +4,10 @@
       <img v-if="!hasCookie" src="@/assets/userProfile.png" alt=""/>
       <img v-if="hasCookie" :src="loginUser?.avatarUrl" :alt="loginUser?.nickname">
     </div>
-    <div v-if="!cookieStore.hasCookie" class="login-please" @click.stop="handlerShowLogin">
+    <div v-if="!hasCookie" class="login-please" @click.stop="handlerShowLogin">
       请登录
     </div>
-    <div v-if="cookieStore.hasCookie">
+    <div v-if="hasCookie" @click.stop="handlerShowUserControl">
       {{ loginUser?.nickname }}
     </div>
     <div class="icon">
@@ -16,21 +16,29 @@
         <path d="M941.808046 195.931415 512 828.068585 82.191954 195.931415Z"></path>
       </svg>
     </div>
+    <m-user-control v-model:show="userControlShow"/>
   </div>
-  <m-login-modal v-model:show="show"/>
+  <m-login-modal v-model:show="loginShow"/>
 </template>
 
 <script lang="ts" setup>
 import MLoginModal from '@/components/user/MLoginModal.vue'
+import MUserControl from '@/components/user/MUserControl.vue'
 import {computed, ComputedRef, ref, Ref, watchPostEffect} from 'vue'
 import {getCookieStore, getUserStore} from '@/store'
 import {UserInfo} from '@/types'
 
 
-const show: Ref<boolean> = ref(false)
+const loginShow: Ref<boolean> = ref(false)
+const userControlShow: Ref<boolean> = ref(false)
+
 
 function handlerShowLogin() {
-  show.value = true
+  loginShow.value = true
+}
+
+function handlerShowUserControl() {
+  userControlShow.value = !userControlShow.value
 }
 
 const cookieStore = getCookieStore()
@@ -54,7 +62,21 @@ watchPostEffect(() => {
   display: flex;
   align-items: center;
   word-break: keep-all;
-  font-size: 14px;
+  font-size: 12px;
+  position: relative;
+
+  & > div:not(.m-user-control) {
+    cursor: pointer;
+  }
+
+  & > div:not(.m-user-control):hover {
+    color: white;
+  }
+
+  svg.icon {
+    position: relative;
+    top: -2px;
+  }
 
   & > div:not(:first-child) {
     margin-left: 5px;

@@ -26,6 +26,7 @@ const useUserStore = defineStore('userStore', {
     },
     async clearUserInfo(): Promise<void> {
       this.loginUser = undefined
+      this.userDetail = undefined
     }
   },
   getters: {

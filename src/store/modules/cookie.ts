@@ -1,6 +1,5 @@
 import {defineStore} from 'pinia'
 import {store} from '@/store'
-import {toHump} from '@/util/common'
 
 interface CookieStore {
   cookie?: string
@@ -21,7 +20,7 @@ const useCookieStore = defineStore('cookieStore', {
       }
     },
     async clearCookie(): Promise<void> {
-      this.cookie = undefined
+      this.cookie = ''
     }
   },
   getters: {
