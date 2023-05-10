@@ -38,3 +38,32 @@ export function getCookieFromStr(cookie: string, name: string): string {
   }
   return ''
 }
+
+export function formatDate(date: Date | string | number | undefined, format: string) {
+  if (typeof date === 'number' || typeof date === 'string') {
+    return formatDate(new Date(date), format)
+  } else if (typeof date === 'undefined') {
+    return ''
+  } else {
+    const reg: Record<string, number> = {
+      'y+': date.getFullYear(),
+      'M+': date.getMonth() + 1,
+      'd+': date.getDate(),
+      'h+': date.getHours(),
+      'm+': date.getMinutes(),
+      's+': date.getSeconds()
+    }
+    objForEach(reg, (k, v) => {
+      if (new RegExp(`(${k})`).test(format)) {
+        const regV = RegExp.$1
+        const fillZero = regV.length > 1 && v < 10
+        if (fillZero) {
+          format = format.replace(regV, `0${v}`)
+        } else {
+          format = format.replace(regV, v)
+        }
+      }
+    })
+    return format
+  }
+}

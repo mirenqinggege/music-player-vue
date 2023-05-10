@@ -23,8 +23,8 @@
           <span class="title">我的音乐</span>
 
           <template v-for="item in playlist" :key="String(item.id)">
-            <router-link to="" custom v-slot="{navigate, isActive}">
-              <div :class="isActive ? ['playlist', 'active'] : ['menu-item']" @click="navigate">
+            <router-link replace :to="{path: `/play-list/${item.id}`}" custom v-slot="{navigate, isActive}">
+              <div :class="isActive ? ['playlist', 'active'] : ['playlist']" @click="navigate">
                 <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
                      xmlns="http://www.w3.org/2000/svg" width="30" height="30">
                   <path
@@ -175,13 +175,25 @@ function handlerReload() {
       color: rgb(159, 159, 159);
     }
 
+    .playlist.active {
+      background-color: rgb(246, 246, 247);
+    }
+
     .playlist {
-      font-size: 15px;
+      font-size: 13px;
       padding: 5px;
       word-break: keep-all;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      cursor: pointer;
+      color: rgb(55, 55, 55);
+      user-select: none;
+
+      &:hover {
+        color: black;
+        background-color: rgb(246, 246, 247);
+      }
 
       .icon {
         position: relative;

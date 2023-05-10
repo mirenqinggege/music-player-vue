@@ -10,3 +10,17 @@
 .split-line {
     background-color: #fbd9d9;
 }
+
+.button-group button:first-child {
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.button-group button:last-child {
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
+.button-group button:not(:first-child,:last-child) {
+    border-radius: 0 !important;
+}

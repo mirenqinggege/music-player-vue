@@ -37,6 +37,11 @@ const children: Array<RouteRecordRaw> = [
     children: discoverMusicChild
   },
   {
+    name: 'play-list',
+    path: 'play-list/:id',
+    component: () => import('@/pages/playlist/MPlayList.vue')
+  },
+  {
     name: 'podcasts',
     path: 'podcasts',
     component: () => import('@/pages/temp.vue')

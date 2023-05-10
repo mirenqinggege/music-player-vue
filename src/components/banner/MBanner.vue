@@ -30,7 +30,7 @@ let timer: NodeJS.Timer | undefined
 function startAnim() {
   if (timer === undefined) {
     timer = setInterval(() => {
-      banner.value.classList.add('animation')
+      banner.value?.classList.add('animation')
     }, 5000)
   }
 }
