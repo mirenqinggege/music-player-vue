@@ -67,20 +67,40 @@
         </div>
       </div>
     </div>
+
+    <div class="tabs">
+      <template v-for="item in tabs" :key="item.key">
+        <div @click="handlerActive(item)" :class="item.active ? 'active' : ''">{{ item.label }}{{ item.count !== undefined ? `(${item.count})` : '' }}</div>
+      </template>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {Ref, ref, watchSyncEffect} from 'vue'
+import {reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail} from '@/api/playlist'
 import {PlayList, Song} from '@/types'
 import {formatDate} from '@/util/common'
+import {UnwrapNestedRefs} from '@vue/reactivity'
 
 const route = useRoute()
 
 const playlist: Ref<PlayList | undefined> = ref(undefined)
 const songList: Ref<Song[] | undefined> = ref(undefined)
+
+interface Tab {
+  label: string
+  active: boolean
+  key: string
+  count?: number
+}
+
+const tabs: UnwrapNestedRefs<Tab[]> = reactive([
+  {label: '歌曲列表', active: true, key: 'tabs-song-list'},
+  {label: '评论', active: false, key: 'tabs-song-comment', count: 0},
+  {label: '收藏者', active: false, key: 'tabs-collectors'}
+])
 
 watchSyncEffect(() => {
   const {id} = route.params
@@ -91,6 +111,12 @@ watchSyncEffect(() => {
     })
   }
 })
+
+function handlerActive(obj: Tab) {
+  tabs.forEach(v => {
+    v.active = v.key === obj.key
+  })
+}
 
 </script>
 
@@ -205,6 +231,39 @@ watchSyncEffect(() => {
             top: -1px;
           }
         }
+      }
+    }
+  }
+
+  .tabs {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: rgb(55, 55, 55);
+    padding: 10px 30px;
+
+    & > div {
+      cursor: pointer;
+    }
+
+    & > div:not(:first-child) {
+      margin-left: 24px;
+    }
+
+    & > div.active {
+      font-size: 20px;
+      font-weight: bold;
+      position: relative;
+
+      &:after {
+        content: ' ';
+        position: absolute;
+        bottom: -2px;
+        left: 10%;
+        width: 80%;
+        height: 4px;
+        background-color: var(--primary-color);
+        border-radius: 20px;
       }
     }
   }
