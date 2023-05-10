@@ -2,7 +2,7 @@
   <div class="m-user-control" v-show="show">
     <div class="info">
       <div class="info-content">
-        <div>0</div>
+        <div>{{ userDetail?.profile.eventCount }}</div>
         <div>动态</div>
       </div>
       <div class="info-content">
@@ -197,6 +197,7 @@ const userDetail: ComputedRef<UserDetail | undefined> = computed(() => userStore
 function handlerDaily() {
   daily().then(() => {
     alert('签到成功')
+    userStore.fetchUserInfo()
   }).catch(() => {
     alert('重复签到')
   })

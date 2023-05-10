@@ -20,6 +20,8 @@ export default function (method: 'GET' | 'POST', url: string, data: any, options
         const {body: {code}, cookie} = data
         data.body.cookie = cookie
         if (code === 200) {
+          console.debug(method, url)
+          console.debug(data)
           resolve(data.body)
         } else {
           // isNotLogin(code)

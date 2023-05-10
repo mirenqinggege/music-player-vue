@@ -5,6 +5,20 @@ interface CookieStore {
   cookie?: string
 }
 
+const regex = [
+  / ?Max-Age=\d+;/g,
+  / ?Expires=[\w, :]+;/g,
+  / ?Path=[\w/]+;/g,
+  / ?HTTPOnly;?/g
+]
+
+function filter(str: string) {
+  regex.forEach(v => {
+    str = str.replace(v, '')
+  })
+  return str.replace(/;;/g, ';')
+}
+
 const useCookieStore = defineStore('cookieStore', {
   state(): CookieStore {
     return {
@@ -14,9 +28,9 @@ const useCookieStore = defineStore('cookieStore', {
   actions: {
     async setCookie(cookie: string | string[]): Promise<void> {
       if (Array.isArray(cookie)) {
-        this.cookie = cookie.join('; ')
+        return this.setCookie(cookie.join('; '))
       } else {
-        this.cookie = cookie
+        this.cookie = filter(cookie)
       }
     },
     async clearCookie(): Promise<void> {
