@@ -1,4 +1,5 @@
 import {valueEquals} from 'element-plus'
+import {min} from '@popperjs/core/lib/utils/math'
 
 export function AntiShake(time: number = 100) {
   let timer: NodeJS.Timer | undefined
@@ -66,4 +67,17 @@ export function formatDate(date: Date | string | number | undefined, format: str
     })
     return format
   }
+}
+
+export function millisecond2minute(ms: number | undefined): string {
+  if (ms) {
+    const minUnit = 1000 * 60
+    const minute = ms / minUnit
+    const second = ms % minUnit / 1000
+    const m = minute.toFixed(0)
+    const s = second.toFixed(0)
+    const result = [m < 10 ? `0${m}` : m, s < 10 ? `0${s}` : s]
+    return result.join(':')
+  }
+  return '00:00'
 }

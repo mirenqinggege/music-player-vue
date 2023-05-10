@@ -70,24 +70,49 @@
 
     <div class="tabs">
       <template v-for="item in tabs" :key="item.key">
-        <div @click="handlerActive(item)" :class="item.active ? 'active' : ''">{{ item.label }}{{ item.count !== undefined ? `(${item.count})` : '' }}</div>
+        <div @click="handlerActive(item)" :class="item.active ? 'active' : ''">{{
+            item.label
+          }}{{ item.count !== undefined ? `(${item.count})` : '' }}
+        </div>
       </template>
+    </div>
+    <div class="tabs-content">
+      <m-table v-if="tabs[0].active" :columns="columns" :data-source="dataSource"/>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {reactive, Ref, ref, watchSyncEffect} from 'vue'
+import {computed, reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail} from '@/api/playlist'
-import {PlayList, Song} from '@/types'
-import {formatDate} from '@/util/common'
+import {PlayList, Track} from '@/types'
+import {formatDate, millisecond2minute} from '@/util/common'
 import {UnwrapNestedRefs} from '@vue/reactivity'
+import MTable, {Column} from '@/components/table/MTable.vue'
 
 const route = useRoute()
 
 const playlist: Ref<PlayList | undefined> = ref(undefined)
-const songList: Ref<Song[] | undefined> = ref(undefined)
+const songList: Ref<Track[] | undefined> = ref(undefined)
+const columns: Column[] = [
+  {label: '', index: true, align: 'center', width: 64},
+  {label: '操作', width: 50},
+  {label: '标题', dataIndex: 'name', width: 300},
+  {label: '歌手', dataIndex: 'artist'},
+  {label: '专辑', dataIndex: 'album'},
+  {label: '时间', dataIndex: 'time', width: 72}
+]
+
+const dataSource = computed(() => {
+  return songList.value?.map(({id, name, ar, al, dt}) => ({
+    id,
+    name,
+    artist: (0 < ar?.length ? ar?.[0].name : '未知歌手'),
+    album: al?.name || '未知专辑',
+    time: millisecond2minute(dt)
+  })) || []
+})
 
 interface Tab {
   label: string
@@ -105,9 +130,9 @@ const tabs: UnwrapNestedRefs<Tab[]> = reactive([
 watchSyncEffect(() => {
   const {id} = route.params
   if (id) {
-    getPlaylistDetail(id).then(({playlist: playList, privileges}) => {
+    getPlaylistDetail(id).then(({playlist: playList}) => {
       playlist.value = playList
-      songList.value = privileges
+      songList.value = playList.tracks
     })
   }
 })
@@ -124,6 +149,12 @@ function handlerActive(obj: Tab) {
 .m-play-list {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .info-area {
     display: flex;
@@ -135,6 +166,7 @@ function handlerActive(obj: Tab) {
       height: 185px;
       border-radius: 5px;
       overflow: hidden;
+      border: 1px solid rgb(242, 242, 242)
     }
 
     .text-area {

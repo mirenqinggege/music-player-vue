@@ -10,7 +10,6 @@ interface PlayListResponse extends Response {
   songFromUsers: any
   urls: any
   playlist: PlayList
-  privileges: Song[]
 }
 
 export function getPlaylistDetail(id): Promise<PlayListResponse> {
