@@ -2,6 +2,7 @@ import {app, BrowserWindow, globalShortcut, ipcMain, Menu, session} from 'electr
 import {join} from 'path'
 import request from '../src/util/request.js'
 import Accelerator = Electron.Accelerator
+import {existsSync} from 'fs'
 
 Menu.setApplicationMenu(null)
 
@@ -21,7 +22,10 @@ async function createWindow() {
     }
   }
   const browserWindow: BrowserWindow = new BrowserWindow(config)
-  session.defaultSession.loadExtension('/home/zkh/project/devtools-6.4.5/packages/shell-chrome', {allowFileAccess: true}).then()
+  const path = '/home/zkh/project/devtools-6.4.5/packages/shell-chrome'
+  if (existsSync(path)) {
+    session.defaultSession.loadExtension(path, {allowFileAccess: true}).then()
+  }
   browserWindow.on('ready-to-show', () => {
     browserWindow.show()
     browserWindow.webContents.toggleDevTools()
