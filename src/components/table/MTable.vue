@@ -24,9 +24,9 @@
             <div v-else
                  :style="{width: cell.width === undefined ? columnWidth: `${cell.width}px`, textAlign: cell.align}"
                  :class="['m-table-column', `_${i}`, cell.customClass]">
-              {{
-                cell.format !== undefined ? cell.format(item[cell.dataIndex], item, dataSource) : item[cell.dataIndex]
-              }}
+              <component v-if="cell.format !== undefined"
+                         :is="cell.format(item[cell.dataIndex], item, index)"></component>
+              <template v-else>{{ item[cell.dataIndex] }}</template>
             </div>
           </template>
         </div>
@@ -49,7 +49,7 @@ export interface Column {
   index?: boolean
   label: string
   dataIndex?: string
-  format?: (val, row, arr) => string | VNode
+  format?: (val: any, row?: any, index?: number) => string | VNode
   width?: number
   customClass?: string[]
   align?: string

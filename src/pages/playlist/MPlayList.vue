@@ -77,19 +77,20 @@
       </template>
     </div>
     <div class="tabs-content">
-      <m-table v-if="tabs[0].active" :columns="columns" :data-source="dataSource"/>
+      <m-table row-key="id" v-if="tabs[0].active" :columns="columns" :data-source="dataSource"/>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, reactive, Ref, ref, watchSyncEffect} from 'vue'
+import {computed, h, reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail} from '@/api/playlist'
 import {PlayList, Track} from '@/types'
 import {formatDate, millisecond2minute} from '@/util/common'
 import {UnwrapNestedRefs} from '@vue/reactivity'
 import MTable, {Column} from '@/components/table/MTable.vue'
+import MOperate from '@/pages/playlist/MOperate.vue'
 
 const route = useRoute()
 
@@ -97,7 +98,17 @@ const playlist: Ref<PlayList | undefined> = ref(undefined)
 const songList: Ref<Track[] | undefined> = ref(undefined)
 const columns: Column[] = [
   {label: '', index: true, align: 'center', width: 64},
-  {label: '操作', width: 50},
+  {
+    label: '操作',
+    width: 50,
+    format: (val, row, index) => h(MOperate, {
+      liked: true,
+      downloaded: true,
+      downloading: true,
+      value: 50, max: 100,
+      key: `operate-${index}`
+    })
+  },
   {label: '标题', dataIndex: 'name', width: 300},
   {label: '歌手', dataIndex: 'artist'},
   {label: '专辑', dataIndex: 'album'},
