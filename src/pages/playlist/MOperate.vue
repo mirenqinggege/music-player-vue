@@ -51,7 +51,6 @@ const strokeDasharray: ComputedRef<string> = computed(() => {
   const {value, max} = props
   const percent = value / max
   const svg = downloadProgress.value
-  console.log(svg)
   if (svg) {
     const totalLength = svg.getTotalLength()
     return `${totalLength * percent} ${totalLength * (1 - percent)}`

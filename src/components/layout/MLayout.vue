@@ -42,7 +42,11 @@
       </div>
     </div>
     <div id="m-footer">
-      <m-player></m-player>
+      <m-player @progress="handlerProgress" @time-change="handlerTimeChange" custom-class="m-player">
+        <template v-slot="{songInfo: {al, name, ar}}">
+          <m-song :cover="al?.picUrl" :name="name" :artist="ar?.[0]?.name" :liked="false"/>
+        </template>
+      </m-player>
     </div>
   </div>
 </template>
@@ -53,9 +57,10 @@ import MSearchInput from '@/components/layout/MSearchInput.vue'
 import MWindowControl from '@/components/layout/MWindowControl.vue'
 import {MenuItem, PlayList} from '@/types'
 import {getMySongListStore} from '@/store'
-import {computed, ComputedRef, onMounted} from 'vue'
+import {computed, ComputedRef, onMounted, provide, reactive} from 'vue'
 import MUserProfile from '@/components/user/MUserProfile.vue'
 import MPlayer from '@/components/player/MPlayer.vue'
+import MSong from '@/components/song/MSong.vue'
 
 const fixedMenu: MenuItem[] = [
   {routeName: 'discover', label: '发现音乐', key: 'fixed-menu-item-discover'},
@@ -79,6 +84,18 @@ onMounted(() => {
 function handlerReload() {
   mySongListStore.fetchMySongList()
 }
+
+function handlerProgress(obj) {
+  console.log(obj)
+}
+
+function handlerTimeChange(obj, obj2) {
+  console.log(obj, obj2)
+}
+
+const play = reactive({play: () => undefined})
+
+provide('play', play)
 </script>
 
 <style lang="less" scoped>
@@ -159,6 +176,12 @@ function handlerReload() {
     border-top: 1px solid var(--primary-color-border);
     box-sizing: border-box;
     padding: 14px;
+
+    .m-player {
+      width: 100%;
+      height: 100%;
+      display: flex;
+    }
   }
 
   #content {

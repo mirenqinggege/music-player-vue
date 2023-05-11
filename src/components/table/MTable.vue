@@ -14,7 +14,7 @@
     <div class="m-table-body">
       <template v-for="(item, index) in dataSource" :key="`m-table-body-row-${index}-${item[rowKey]}`">
         <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '']"
-             @click="handlerClickRow(item, index)">
+             @click.stop="handlerClickRow(item, index)" @dblclick.stop="handlerDbclickRow(item)">
           <template v-for="(cell, i) in columns" :key="`m-table-body-column-${index}-${item[rowKey]}`">
             <div :style="{width: cell.width === undefined ? columnWidth: `${cell.width}px`, textAlign: cell.align}"
                  v-if="cell.index"
@@ -59,6 +59,7 @@ const props = defineProps<Props>()
 
 interface Emits {
   (event: 'rowClick', obj: any): void
+  (event: 'rowDoubleClick', obj: any): void
 }
 
 const emits = defineEmits<Emits>()
@@ -78,6 +79,10 @@ function handlerClickRow(obj, _that) {
   currentActiveIndex = _that
   selectionFlag[_that] = true
   emits('rowClick', obj)
+}
+
+function handlerDbclickRow(obj) {
+  emits('rowDoubleClick', obj)
 }
 
 let currentActiveIndex: number | undefined
@@ -121,6 +126,7 @@ watchSyncEffect(() => {
   }
 
   .m-table-column {
+    user-select: none;
     line-height: 2.5;
     cursor: default;
     box-sizing: border-box;

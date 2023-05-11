@@ -19,4 +19,6 @@ export * from './modules/user'
 
 export * from './modules/player'
 
+export * from './modules/playlist'
+
 export default store

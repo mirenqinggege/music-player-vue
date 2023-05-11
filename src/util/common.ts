@@ -83,7 +83,7 @@ export function second2minute(s: number | undefined): string {
   if (s) {
     const minUnit = 60
     const minute = (s / minUnit).toFixed(0)
-    const second = s % minUnit
+    const second = (s % minUnit).toFixed(0)
     const result = [minute < 10 ? `0${minute}` : minute, second < 10 ? `0${second}` : second]
     return result.join(':')
   }

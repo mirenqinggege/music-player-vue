@@ -180,3 +180,7 @@ export interface TrackIds {
    f?: any;
    sr?: any;
 }
+
+export function equals(track1: Track, track2: Track) {
+   return track1.id === track2.id
+}

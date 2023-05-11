@@ -8,7 +8,12 @@ interface SongDetailResponse extends Response {
 
 export function getSongDetail(id): Promise<SongDetailResponse> {
   const data = {
-    c: JSON.stringify([{id}])
+    ids: JSON.stringify([id]),
+    br: 999000
   }
-  return request('POST', 'https://music.163.com/api/v3/song/detail', data, {crypto: 'weapi'})
+  return request(
+    'POST',
+    'https://interface3.music.163.com/eapi/song/enhance/player/url',
+    data,
+    {crypto: 'weapi', url: '/api/song/enhance/player/url'})
 }

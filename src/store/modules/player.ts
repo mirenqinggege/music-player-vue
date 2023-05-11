@@ -17,6 +17,7 @@ const usePlayerStore = defineStore('playerStore', {
   state(): PlayerStore {
     return {
       songInfo: undefined,
+      songDetail: undefined,
       playStatus: 'stop',
       loop: 'list-order',
       songTimeLength: undefined,

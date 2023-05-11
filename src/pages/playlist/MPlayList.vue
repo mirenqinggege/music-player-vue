@@ -77,13 +77,14 @@
       </template>
     </div>
     <div class="tabs-content">
-      <m-table row-key="id" v-if="tabs[0].active" :columns="columns" :data-source="dataSource"/>
+      <m-table @row-double-click="handlerRowDbClick" row-key="id" v-if="tabs[0].active" :columns="columns"
+               :data-source="dataSource"/>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, h, reactive, Ref, ref, watchSyncEffect} from 'vue'
+import {computed, h, inject, reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail} from '@/api/playlist'
 import {PlayList, Track} from '@/types'
@@ -91,6 +92,7 @@ import {formatDate, millisecond2minute} from '@/util/common'
 import {UnwrapNestedRefs} from '@vue/reactivity'
 import MTable, {Column} from '@/components/table/MTable.vue'
 import MOperate from '@/pages/playlist/MOperate.vue'
+import {getPlaylistStore} from '@/store'
 
 const route = useRoute()
 
@@ -116,13 +118,15 @@ const columns: Column[] = [
 ]
 
 const dataSource = computed(() => {
-  return songList.value?.map(({id, name, ar, al, dt}) => ({
-    id,
-    name,
-    artist: (0 < ar?.length ? ar?.[0].name : '未知歌手'),
-    album: al?.name || '未知专辑',
-    time: millisecond2minute(dt)
-  })) || []
+  return songList.value?.map((value) => {
+    const {ar, al, dt} = value
+    return {
+      ...value,
+      artist: (0 < ar?.length ? ar?.[0].name : '未知歌手'),
+      album: al?.name || '未知专辑',
+      time: millisecond2minute(dt)
+    }
+  })
 })
 
 interface Tab {
@@ -152,6 +156,21 @@ function handlerActive(obj: Tab) {
   tabs.forEach(v => {
     v.active = v.key === obj.key
   })
+}
+
+const playlistStore = getPlaylistStore()
+
+const play = inject('play')
+
+function handlerRowDbClick(obj) {
+  const includes = playlistStore.includes
+  const number = includes(obj)
+  if (number === -1) {
+    playlistStore.appendPlaylist(obj)
+      .then(index => play.play1?.(index))
+  } else {
+    play.play1?.(number)
+  }
 }
 
 </script>

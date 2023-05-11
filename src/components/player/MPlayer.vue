@@ -1,12 +1,19 @@
 <template>
   <div :class="customClass">
-    <slot></slot>
+    <slot
+      :song-info="songInfo"
+      :prev="prev"
+      :next="next"
+      :play-status="playStatus"
+      :pause="pause"
+      :play="play">
+    </slot>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {getPlayerStore} from '@/store'
-import {provide, ref, watchSyncEffect} from 'vue'
+import {getPlayerStore, getPlaylistStore} from '@/store'
+import {computed, inject, provide, readonly, ref, watchSyncEffect} from 'vue'
 import {Track} from '@/types'
 import {newInterval, second2minute} from '@/util/common'
 
@@ -27,10 +34,16 @@ const emits = defineEmits<Emits>()
 const canplayFlag = ref<boolean>(false)
 
 const playerStore = getPlayerStore()
+const playlistStore = getPlaylistStore()
+
+const playlist = computed<Track[]>(() => playlistStore.getPlaylist)
+const playStatus = computed<string>(() => playerStore.getPlayStatus)
+const songInfo = computed<Track>(() => playerStore.songInfo || {})
 
 const audio: HTMLAudioElement = new Audio()
 
 audio.addEventListener('canplay', () => {
+  console.log('canplay!!!')
   playerStore.canplay()
 })
 
@@ -43,21 +56,35 @@ audio.addEventListener('ended', () => {
   executor.stop()
 })
 
-const executor = newInterval(100, () => {
+audio.addEventListener('error', (error) => {
+  playerStore.stop()
+  executor.stop()
+  /*const currIndex = playlistStore.getCurrIndex
+  play(currIndex)*/
+  console.log(error)
+})
+
+const executor = newInterval(1000, () => {
   const {currentTime, duration} = audio
   const progress = ((currentTime / duration) * 100).toFixed(2)
-  emits('progress', parseInt(progress), 100)
+  const number = parseInt(progress)
+  emits('progress', isNaN(number) ? 0 : number, 100)
   emits('timeChange', second2minute(currentTime), second2minute(duration))
 })
 
-function play(track: Track) {
-  playerStore.update(track)
+async function play(index: number) {
+  if (index == undefined) {
+    return
+  }
+  await playlistStore.setPosition(index)
+  return playerStore.update(playlist.value[index])
     .then(playerStore.load)
     .then(url => {
       audio.src = url
+      console.log(url)
       canplayFlag.value = true
+      executor.start()
     })
-  executor.start()
 }
 
 function pause() {
@@ -65,16 +92,41 @@ function pause() {
   executor.stop()
 }
 
-provide('play', play)
-provide('pause', pause)
+function stop() {
+  audio.pause()
+  executor.stop()
+  playerStore.stop()
+}
+
+function next() {
+  stop()
+  playlistStore.offset(1)
+    .then(play)
+}
+
+function prev() {
+  stop()
+  playlistStore.offset(-1)
+    .then(play)
+}
+
+// provide('play', readonly(play))
+const playObj = inject('play')
+playObj.play1 = play
 
 watchSyncEffect(() => {
   const canplay = playerStore.isCanplay
+  console.log(canplay, canplayFlag.value)
   if (canplay && canplayFlag.value) {
     playerStore.play()
     audio.play()
+    canplayFlag.value = false
   }
-  canplayFlag.value = false
+})
+
+watchSyncEffect(() => {
+  const volume = playerStore.getVolume
+  audio.volume = volume
 })
 
 </script>
