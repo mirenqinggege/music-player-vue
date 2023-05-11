@@ -17,4 +17,6 @@ export * from './modules/cookie'
 
 export * from './modules/user'
 
+export * from './modules/player'
+
 export default store

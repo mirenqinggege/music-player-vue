@@ -41,7 +41,9 @@
         <router-view/>
       </div>
     </div>
-    <div id="m-footer"></div>
+    <div id="m-footer">
+      <m-player></m-player>
+    </div>
   </div>
 </template>
 
@@ -53,6 +55,7 @@ import {MenuItem, PlayList} from '@/types'
 import {getMySongListStore} from '@/store'
 import {computed, ComputedRef, onMounted} from 'vue'
 import MUserProfile from '@/components/user/MUserProfile.vue'
+import MPlayer from '@/components/player/MPlayer.vue'
 
 const fixedMenu: MenuItem[] = [
   {routeName: 'discover', label: '发现音乐', key: 'fixed-menu-item-discover'},
@@ -154,6 +157,8 @@ function handlerReload() {
     flex-shrink: 0;
     height: var(--footer-height);
     border-top: 1px solid var(--primary-color-border);
+    box-sizing: border-box;
+    padding: 14px;
   }
 
   #content {

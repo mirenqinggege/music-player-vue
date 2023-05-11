@@ -1,6 +1,3 @@
-import {valueEquals} from 'element-plus'
-import {min} from '@popperjs/core/lib/utils/math'
-
 export function AntiShake(time: number = 100) {
   let timer: NodeJS.Timer | undefined
   return (callback: Function) => {
@@ -80,4 +77,31 @@ export function millisecond2minute(ms: number | undefined): string {
     return result.join(':')
   }
   return '00:00'
+}
+
+export function second2minute(s: number | undefined): string {
+  if (s) {
+    const minUnit = 60
+    const minute = (s / minUnit).toFixed(0)
+    const second = s % minUnit
+    const result = [minute < 10 ? `0${minute}` : minute, second < 10 ? `0${second}` : second]
+    return result.join(':')
+  }
+  return '00:00'
+}
+
+export function newInterval(ms: number, task?: Function) {
+  let index: NodeJS.Timer | undefined
+  return {
+    start(callable?: Function) {
+      if (index !== undefined) {
+        throw new Error('this interval is running')
+      }
+      index = setInterval(callable !== undefined ? callable : (task || (() => {})), ms)
+    },
+    stop() {
+      clearInterval(index)
+      index = undefined
+    }
+  }
 }
