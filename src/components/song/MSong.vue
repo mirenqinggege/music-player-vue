@@ -30,6 +30,8 @@ withDefaults(defineProps<Props>(), {
 .m-song {
   height: 100%;
   display: flex;
+  box-sizing: border-box;
+  padding: 14px;
 
   .cover {
     border-radius: 5px;

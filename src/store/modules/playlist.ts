@@ -5,18 +5,21 @@ import {equals, Track} from '@/types'
 interface PlaylistStore {
   playlist: Track[]
   currIndex: number
+  panelShow: boolean
 }
 
 const usePlaylistStore = defineStore('playlistStore', {
-  state() {
+  state(): PlaylistStore {
     return {
       playlist: [],
-      currIndex: 0
+      currIndex: 0,
+      panelShow: false
     }
   },
   actions: {
     async setPlaylist(playlist: Track[]) {
       this.playlist = playlist
+      return 0
     },
     async appendPlaylist(...playlist: Track[]) {
       const length = this.playlist.length
@@ -33,6 +36,7 @@ const usePlaylistStore = defineStore('playlistStore', {
         throw new Error('index 超出播放列表长度')
       }
       this.currIndex = index
+      return index
     },
     async clear() {
       this.playlist.splice(0)
@@ -42,13 +46,20 @@ const usePlaylistStore = defineStore('playlistStore', {
       await this.setPosition(index)
       return this.currIndex
     },
-
+    async togglePanel() {
+      this.panelShow = !this.panelShow
+    }
   },
   getters: {
     getPlaylist: (state: PlaylistStore) => state.playlist,
     getCurrIndex: (state: PlaylistStore) => state.currIndex,
     includes: (state: PlaylistStore) =>
-      (track: Track) => state.playlist.findIndex((val) => equals(track, val))
+      (track: Track) => state.playlist.findIndex((val) => equals(track, val)),
+    getPanelShow: (state: PlaylistStore) => state.panelShow
+  },
+  persist: {
+    enabled: true,
+    strategies: [{storage: localStorage}]
   }
 })
 

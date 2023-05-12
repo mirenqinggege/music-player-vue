@@ -41,9 +41,11 @@
       </div>
     </div>
     <div class="m-progress-bar">
+      <span>{{ currentTime }}</span>
       <div class="m-progress">
         <div :style="{width}" class="m-progress-value"></div>
       </div>
+      <span>{{ totalTime }}</span>
     </div>
   </div>
 </template>
@@ -94,6 +96,8 @@ function handlerPlay() {
   width: 430px;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  padding: 7px 0;
 
   & > div {
     display: flex;
@@ -103,6 +107,15 @@ function handlerPlay() {
 
   .m-progress-bar {
     height: calc(100% - 36px);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    font-size: 12px;
+
+    span {
+      margin: 0 5px;
+      color: rgb(159, 159, 159);
+    }
   }
 
 
@@ -139,6 +152,7 @@ function handlerPlay() {
     background-color: rgb(206, 206, 206);
 
     .m-progress-value {
+      transition: all 800ms;
       height: 100%;
       background-color: var(--primary-color);
     }

@@ -88,7 +88,7 @@ import {computed, h, inject, reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail} from '@/api/playlist'
 import {equals, PlayList, Track} from '@/types'
-import {formatDate, millisecond2minute} from '@/util/common'
+import {deepClone, formatDate, millisecond2minute} from '@/util/common'
 import {UnwrapNestedRefs} from '@vue/reactivity'
 import MTable, {Column} from '@/components/table/MTable.vue'
 import MOperate from '@/pages/playlist/MOperate.vue'
@@ -173,13 +173,13 @@ const playlistStore = getPlaylistStore()
 
 const play = inject('play')
 
-function handlerRowDbClick(obj) {
+function handlerRowDbClick(obj, index) {
   play.stop()
   const includes = playlistStore.includes
   const number = includes(obj)
   if (number === -1) {
-    playlistStore.appendPlaylist(obj)
-      .then(index => play.play1?.(index))
+    playlistStore.setPlaylist(deepClone(dataSource.value))
+      .then(() => play.play1?.(index))
   } else {
     play.play1?.(number)
   }
@@ -346,11 +346,5 @@ function handlerRowDbClick(obj) {
 img {
   width: 100%;
   height: 100%;
-}
-</style>
-
-<style>
-.play-this .track-name {
-  color: var(--primary-color) !important;
 }
 </style>

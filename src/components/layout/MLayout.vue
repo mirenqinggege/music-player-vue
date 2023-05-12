@@ -186,8 +186,6 @@ provide('play', play)
     height: var(--footer-height);
     border-top: 1px solid var(--primary-color-border);
     box-sizing: border-box;
-    padding: 14px;
-
     .m-player {
       width: 100%;
       height: 100%;
@@ -249,5 +247,10 @@ provide('play', play)
 
 .m-layout:nth-child(2) {
   height: calc(100vh - (var(--footer-height) + var(--header-height)));
+}
+</style>
+<style>
+.play-this .track-name {
+  color: var(--primary-color) !important;
 }
 </style>
