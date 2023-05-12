@@ -14,7 +14,7 @@
       <div id="side">
         <div class="fixed">
           <template v-for="(item) in fixedMenu" :key="item.key">
-            <router-link exact-active-class="active" v-slot="{navigate, isActive}" custom :to="{name: item.routeName}">
+            <router-link replace exact-active-class="active" v-slot="{navigate, isActive}" custom :to="{name: item.routeName}">
               <div :class="isActive ? ['menu-item', 'active'] : ['menu-item']" @click="navigate">{{ item.label }}</div>
             </router-link>
           </template>
@@ -97,11 +97,11 @@ function handlerReload() {
 }
 
 function handlerProgress(obj) {
-  console.log(obj)
+  // console.log(obj)
 }
 
 function handlerTimeChange(obj, obj2) {
-  console.log(obj, obj2)
+  // console.log(obj, obj2)
 }
 
 const play = reactive({play: () => undefined})

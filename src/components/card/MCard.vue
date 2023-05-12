@@ -1,20 +1,25 @@
 <template>
-  <div class="m-card" :style="style">
-    <div class="cover">
-      <slot name="image">
-        <img :src="image" alt="">
-      </slot>
-    </div>
-    <div class="text">
-      <slot name="text">{{ text }}</slot>
-    </div>
-  </div>
+  <router-link :to="{path: `/play-list/${id}`}" custom>
+    <template v-slot="{navigate}">
+      <div class="m-card" :style="style" @click.stop="navigate">
+        <div class="cover">
+          <slot name="image">
+            <img :src="image" alt="">
+          </slot>
+        </div>
+        <div class="text">
+          <slot name="text">{{ text }}</slot>
+        </div>
+      </div>
+    </template>
+  </router-link>
 </template>
 
 <script lang="ts" setup>
 import {computed} from 'vue'
 
 interface Props {
+  id?: number
   image?: string
   width?: number | string,
   text?: string

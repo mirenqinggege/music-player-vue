@@ -19,16 +19,18 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
-const emits = defineEmits(['back', 'forward'])
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
 
 function handlerBack() {
-  emits('back')
+  router.back()
 }
 
 function handlerForward() {
-  emits('forward')
+  router.forward()
 }
 
 </script>
@@ -42,10 +44,11 @@ function handlerForward() {
   flex-shrink: 0;
 
   .forward, .back {
+    cursor: pointer;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    line-height: 1.7;
+    width: 26px;
+    height: 26px;
+    line-height: 1.3;
     text-align: center;
     background-color: rgb(217, 59, 59);
   }

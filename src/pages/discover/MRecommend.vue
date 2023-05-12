@@ -5,7 +5,7 @@
       <m-group label="推荐歌单">
         <div class="d-flex flex-wrap justify-content-between">
           <template v-for="(item) in recommendSongList">
-            <m-card width="19%" :text="item.name" :image="item.picUrl"/>
+            <m-card width="19%" :id="item.id" :text="item.name" :image="item.picUrl"/>
           </template>
         </div>
       </m-group>
