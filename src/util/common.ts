@@ -105,3 +105,11 @@ export function newInterval(ms: number, task?: Function) {
     }
   }
 }
+
+export function callOrReturn(obj: any, ...args: any[]) {
+  if (typeof obj === 'function') {
+    return obj.apply(obj, args)
+  } else {
+    return obj
+  }
+}

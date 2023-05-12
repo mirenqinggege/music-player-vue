@@ -55,8 +55,7 @@ audio.addEventListener('canplay', () => {
 })
 
 audio.addEventListener('ended', () => {
-  playerStore.stop()
-  executor.stop()
+  next()
 })
 
 audio.addEventListener('error', (error) => {

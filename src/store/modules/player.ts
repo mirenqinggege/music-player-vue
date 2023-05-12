@@ -58,7 +58,8 @@ const usePlayerStore = defineStore('playerStore', {
     getVolume: (state: PlayerStore) => state.volume,
     getSongTimeLength: (state: PlayerStore) => state.songTimeLength,
     getCurrPlayProgress: (state: PlayerStore) => state.currPlayProgress,
-    isCanplay: (state: PlayerStore) => state.songDetail !== undefined && ['canplay', 'pause'].includes(state.playStatus)
+    isCanplay: (state: PlayerStore) => state.songDetail !== undefined && ['canplay', 'pause'].includes(state.playStatus),
+    getSongInfo: (state: PlayerStore) => state.songInfo
   }
 })
 

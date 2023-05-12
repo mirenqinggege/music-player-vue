@@ -13,17 +13,19 @@
     </div>
     <div class="m-table-body">
       <template v-for="(item, index) in dataSource" :key="`m-table-body-row-${index}-${item[rowKey]}`">
-        <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '']"
+        <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '', isPlaying(item)]"
              @click.stop="handlerClickRow(item, index)" @dblclick.stop="handlerDbclickRow(item)">
           <template v-for="(cell, i) in columns" :key="`m-table-body-column-${index}-${item[rowKey]}`">
             <div :style="{width: cell.width === undefined ? columnWidth: `${cell.width}px`, textAlign: cell.align}"
                  v-if="cell.index"
-                 :class="['m-table-column', `_${i}`, cell.customClass]">
-              {{ index + 1 }}
+                 :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[cell.dataIndex], item, dataSource)]">
+              <component v-if="cell.format !== undefined"
+                         :is="cell.format(item[cell.dataIndex], item, index)"></component>
+              <template v-else>{{ index + 1 }}</template>
             </div>
             <div v-else
                  :style="{width: cell.width === undefined ? columnWidth: `${cell.width}px`, textAlign: cell.align}"
-                 :class="['m-table-column', `_${i}`, cell.customClass]">
+                 :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[cell.dataIndex], item, dataSource)]">
               <component v-if="cell.format !== undefined"
                          :is="cell.format(item[cell.dataIndex], item, index)"></component>
               <template v-else>{{ item[cell.dataIndex] }}</template>
@@ -38,6 +40,9 @@
 <script lang="ts" setup>
 import {computed, reactive, VNode, watchSyncEffect} from 'vue'
 import {UnwrapNestedRefs} from '@vue/reactivity'
+import {callOrReturn} from '@/util/common'
+import {getPlayerStore} from '@/store'
+import {equals, Track} from '@/types'
 
 interface Props {
   columns: Column[]
@@ -51,7 +56,7 @@ export interface Column {
   dataIndex?: string
   format?: (val: any, row?: any, index?: number) => string | VNode
   width?: number
-  customClass?: string[]
+  customClass?: string[] | ((val: any, row?: any, index?: number) => string | string[])
   align?: string
 }
 
@@ -62,6 +67,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 interface Emits {
   (event: 'rowClick', obj: any): void
+
   (event: 'rowDoubleClick', obj: any): void
 }
 
@@ -102,6 +108,14 @@ function syncSelectionFlag() {
     const diff = selectionFlag.length - props.dataSource.length
     selectionFlag.splice(selectionFlag.length - diff, diff)
   }
+}
+
+const playerStore = getPlayerStore()
+
+const playingSong = computed<Track>(() => playerStore.getSongInfo || {})
+
+function isPlaying(track: Track) {
+  return equals(track, playingSong.value) ? 'play-this' : ''
 }
 
 watchSyncEffect(() => {

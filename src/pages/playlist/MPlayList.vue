@@ -87,19 +87,30 @@
 import {computed, h, inject, reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail} from '@/api/playlist'
-import {PlayList, Track} from '@/types'
+import {equals, PlayList, Track} from '@/types'
 import {formatDate, millisecond2minute} from '@/util/common'
 import {UnwrapNestedRefs} from '@vue/reactivity'
 import MTable, {Column} from '@/components/table/MTable.vue'
 import MOperate from '@/pages/playlist/MOperate.vue'
-import {getPlaylistStore} from '@/store'
+import {getPlayerStore, getPlaylistStore} from '@/store'
+import MTablePlayIcon from '@/components/icon/MTablePlayIcon.vue'
 
 const route = useRoute()
+
+const playerStore = getPlayerStore()
 
 const playlist: Ref<PlayList | undefined> = ref(undefined)
 const songList: Ref<Track[] | undefined> = ref(undefined)
 const columns: Column[] = [
-  {label: '', index: true, align: 'center', width: 64},
+  {
+    label: '', index: true, align: 'center', width: 64, format: (val, row, index) => {
+      const songInfo = playerStore.getSongInfo
+      if (!equals(songInfo || {}, row)) {
+        return h('span', {}, String(index + 1))
+      }
+      return h(MTablePlayIcon, {})
+    }, customClass: ['track-name']
+  },
   {
     label: '操作',
     width: 50,
@@ -111,7 +122,7 @@ const columns: Column[] = [
       key: `operate-${index}`
     })
   },
-  {label: '标题', dataIndex: 'name', width: 300},
+  {label: '标题', dataIndex: 'name', width: 300, customClass: ['track-name']},
   {label: '歌手', dataIndex: 'artist'},
   {label: '专辑', dataIndex: 'album'},
   {label: '时间', dataIndex: 'time', width: 72}
@@ -336,5 +347,10 @@ img {
   width: 100%;
   height: 100%;
 }
+</style>
 
+<style>
+.play-this .track-name {
+  color: var(--primary-color) !important;
+}
 </style>
