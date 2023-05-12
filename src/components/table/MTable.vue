@@ -1,6 +1,6 @@
 <template>
   <div class="m-table">
-    <div class="m-table-header">
+    <div class="m-table-header" v-if="showHeader">
       <template v-for="(item, index) in columns" :key="`m-table-header-column-${Date.now()}-${index}`">
         <div v-if="item.index"
              :style="{width: item.width === undefined ? columnWidth: `${item.width}px`, textAlign: item.align}"
@@ -43,6 +43,7 @@ import {UnwrapNestedRefs} from '@vue/reactivity'
 import {callOrReturn} from '@/util/common'
 import {getPlayerStore} from '@/store'
 import {equals, Track} from '@/types'
+import {vLoading} from 'element-plus'
 
 interface Props {
   columns: Column[]
@@ -117,6 +118,10 @@ const playingSong = computed<Track>(() => playerStore.getSongInfo || {})
 function isPlaying(track: Track) {
   return equals(track, playingSong.value) ? 'play-this' : ''
 }
+
+const showHeader = computed<boolean>(() => {
+  return !props.columns.every(v => v.label.length === 0)
+})
 
 watchSyncEffect(() => {
   const dataSource = props.dataSource
