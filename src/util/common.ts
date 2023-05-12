@@ -140,3 +140,11 @@ export function deepClone<T>(obj: T, hash = new WeakMap()) {
   })
   return cloneObj
 }
+
+export function numFormat(num: number): string {
+  if (num > 9999) {
+    return Math.floor(num * 0.0001) + '万'
+  } else {
+    return num + ''
+  }
+}
