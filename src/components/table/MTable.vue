@@ -55,7 +55,10 @@ export interface Column {
   align?: string
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  columns: () => [],
+  dataSource: () => []
+})
 
 interface Emits {
   (event: 'rowClick', obj: any): void

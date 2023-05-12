@@ -163,6 +163,7 @@ const playlistStore = getPlaylistStore()
 const play = inject('play')
 
 function handlerRowDbClick(obj) {
+  play.stop()
   const includes = playlistStore.includes
   const number = includes(obj)
   if (number === -1) {

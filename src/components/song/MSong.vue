@@ -18,7 +18,12 @@ interface Props {
   liked: boolean
 }
 
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  cover: '',
+  name: '',
+  artist: '',
+  liked: false
+})
 </script>
 
 <style lang="less" scoped>

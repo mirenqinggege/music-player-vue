@@ -1,6 +1,9 @@
 <template>
   <div :class="customClass">
     <slot
+      :total-time="totalTime"
+      :current-time="currentTime"
+      :progress="progress"
       :song-info="songInfo"
       :prev="prev"
       :next="next"
@@ -8,12 +11,17 @@
       :pause="pause"
       :play="play">
     </slot>
+    <div class="m-options">
+      {{ progress }}
+      {{ currentTime }}
+      {{ totalTime }}
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {getPlayerStore, getPlaylistStore} from '@/store'
-import {computed, inject, provide, readonly, ref, watchSyncEffect} from 'vue'
+import {computed, inject, ref, watchSyncEffect} from 'vue'
 import {Track} from '@/types'
 import {newInterval, second2minute} from '@/util/common'
 
@@ -43,12 +51,7 @@ const songInfo = computed<Track>(() => playerStore.songInfo || {})
 const audio: HTMLAudioElement = new Audio()
 
 audio.addEventListener('canplay', () => {
-  console.log('canplay!!!')
   playerStore.canplay()
-})
-
-audio.addEventListener('pause', () => {
-  playerStore.pause()
 })
 
 audio.addEventListener('ended', () => {
@@ -59,29 +62,40 @@ audio.addEventListener('ended', () => {
 audio.addEventListener('error', (error) => {
   playerStore.stop()
   executor.stop()
-  /*const currIndex = playlistStore.getCurrIndex
-  play(currIndex)*/
-  console.log(error)
+  const currIndex = playlistStore.getCurrIndex
+  play(currIndex)
 })
 
+const progress = ref<number>(0)
+const currentTime = ref<string>('00:00')
+const totalTime = ref<string>('00:00')
+
 const executor = newInterval(1000, () => {
-  const {currentTime, duration} = audio
-  const progress = ((currentTime / duration) * 100).toFixed(2)
-  const number = parseInt(progress)
-  emits('progress', isNaN(number) ? 0 : number, 100)
-  emits('timeChange', second2minute(currentTime), second2minute(duration))
+  const {currentTime: currentTime1, duration} = audio
+  const progress1 = ((currentTime1 / duration) * 100).toFixed(2)
+  const number = parseInt(progress1)
+  progress.value = isNaN(number) ? 0 : number
+  emits('progress', progress.value, 100)
+  currentTime.value = second2minute(currentTime1)
+  totalTime.value = second2minute(duration)
+  emits('timeChange', currentTime.value, totalTime.value)
 })
 
 async function play(index: number) {
   if (index == undefined) {
     return
   }
+
+  if (playStatus.value === 'pause') {
+    return audio.play().then(playerStore.play).then(() => {
+      executor.start()
+    })
+  }
   await playlistStore.setPosition(index)
   return playerStore.update(playlist.value[index])
     .then(playerStore.load)
     .then(url => {
       audio.src = url
-      console.log(url)
       canplayFlag.value = true
       executor.start()
     })
@@ -90,6 +104,7 @@ async function play(index: number) {
 function pause() {
   audio.pause()
   executor.stop()
+  playerStore.pause()
 }
 
 function stop() {
@@ -102,21 +117,28 @@ function next() {
   stop()
   playlistStore.offset(1)
     .then(play)
+    .catch(() => {
+      play(0)
+    })
 }
 
 function prev() {
   stop()
   playlistStore.offset(-1)
     .then(play)
+    .catch(() => {
+      const number = playlistStore.getPlaylist.length - 1
+      play(number)
+    })
 }
 
 // provide('play', readonly(play))
 const playObj = inject('play')
 playObj.play1 = play
+playObj.stop = stop
 
 watchSyncEffect(() => {
   const canplay = playerStore.isCanplay
-  console.log(canplay, canplayFlag.value)
   if (canplay && canplayFlag.value) {
     playerStore.play()
     audio.play()
@@ -125,8 +147,15 @@ watchSyncEffect(() => {
 })
 
 watchSyncEffect(() => {
-  const volume = playerStore.getVolume
-  audio.volume = volume
+  audio.volume = playerStore.getVolume
 })
 
 </script>
+
+<style lang="less">
+
+.m-options {
+  width: 206px;
+}
+
+</style>

@@ -43,8 +43,18 @@
     </div>
     <div id="m-footer">
       <m-player @progress="handlerProgress" @time-change="handlerTimeChange" custom-class="m-player">
-        <template v-slot="{songInfo: {al, name, ar}}">
+        <template
+          v-slot="{songInfo: {al, name, ar}, currentTime, totalTime, progress, play, pause, next, prev, playStatus}">
           <m-song :cover="al?.picUrl" :name="name" :artist="ar?.[0]?.name" :liked="false"/>
+          <m-player-control
+            :play-status="playStatus"
+            :play="play"
+            :pause="pause"
+            :next="next"
+            :prev="prev"
+            :current-time="currentTime"
+            :total-time="totalTime"
+            :progress-value="progress"/>
         </template>
       </m-player>
     </div>
@@ -61,6 +71,7 @@ import {computed, ComputedRef, onMounted, provide, reactive} from 'vue'
 import MUserProfile from '@/components/user/MUserProfile.vue'
 import MPlayer from '@/components/player/MPlayer.vue'
 import MSong from '@/components/song/MSong.vue'
+import MPlayerControl from '@/components/player/MPlayerControl.vue'
 
 const fixedMenu: MenuItem[] = [
   {routeName: 'discover', label: '发现音乐', key: 'fixed-menu-item-discover'},
@@ -181,6 +192,7 @@ provide('play', play)
       width: 100%;
       height: 100%;
       display: flex;
+      justify-content: space-between;
     }
   }
 
