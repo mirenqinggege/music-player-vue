@@ -1,3 +1,5 @@
+import {FreeTrialPrivilege} from '@/types'
+
 export interface SongDetail {
    id?: number;
    url?: string;
@@ -24,13 +26,6 @@ export interface SongDetail {
    podcastCtrp?: any;
    effectTypes?: any;
    time?: number;
-}
-
-export interface FreeTrialPrivilege {
-   resConsumable?: boolean;
-   userConsumable?: boolean;
-   listenType?: any;
-   cannotListenReason?: any;
 }
 
 export interface FreeTimeTrialPrivilege {

@@ -84,17 +84,15 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, h, inject, reactive, Ref, ref, watchSyncEffect} from 'vue'
+import {computed, ComputedRef, h, inject, reactive, Ref, ref, watchSyncEffect} from 'vue'
 import {useRoute} from 'vue-router'
 import {getPlaylistDetail, subscribePlaylist} from '@/api/playlist'
 import {equals, PlayList, Track} from '@/types'
-import {deepClone, formatDate, millisecond2minute} from '@/util/common'
-import {UnwrapNestedRefs} from '@vue/reactivity'
+import {deepClone, formatDate, millisecond2minute, numFormat} from '@/util/common'
 import MTable, {Column} from '@/components/table/MTable.vue'
 import MOperate from '@/pages/playlist/MOperate.vue'
 import {getPlayerStore, getPlaylistStore} from '@/store'
 import MTablePlayIcon from '@/components/icon/MTablePlayIcon.vue'
-import {numFormat} from '@/util/common'
 
 const route = useRoute()
 
@@ -145,12 +143,12 @@ interface Tab {
   label: string
   active: boolean
   key: string
-  count?: number
+  count?: number | ComputedRef<number>
 }
 
 const commentCount = computed(() => playlist.value?.commentCount || 0)
 
-const tabs: UnwrapNestedRefs<Tab[]> = reactive([
+const tabs = reactive<Tab[]>([
   {label: '歌曲列表', active: true, key: 'tabs-song-list'},
   {label: '评论', active: false, key: 'tabs-song-comment', count: commentCount},
   {label: '收藏者', active: false, key: 'tabs-collectors'}
@@ -174,7 +172,11 @@ function handlerActive(obj: Tab) {
 
 const playlistStore = getPlaylistStore()
 
-const play = inject('play')
+const play = inject<{
+  play: (index: number) => Promise<void>,
+  play1: (index: number) => Promise<void>,
+  stop: () => void
+}>('play')
 
 function handlerRowDbClick(obj, index) {
   play.stop()
@@ -204,7 +206,7 @@ function handlerSubscribe() {
     const value = <PlayList>(playlist.value)
     subscribePlaylist(id).then(() => {
       value.subscribed = true
-      value.subscribedCount ++
+      value.subscribedCount++
       alert('收藏成功')
     }).catch(() => {
       value.subscribed = true

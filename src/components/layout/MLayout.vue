@@ -96,12 +96,10 @@ function handlerReload() {
   mySongListStore.fetchMySongList()
 }
 
-function handlerProgress(obj) {
-  // console.log(obj)
+function handlerProgress() {
 }
 
-function handlerTimeChange(obj, obj2) {
-  // console.log(obj, obj2)
+function handlerTimeChange() {
 }
 
 const play = reactive({play: () => undefined})

@@ -74,7 +74,7 @@ audio.addEventListener('ended', () => {
   next()
 })
 
-audio.addEventListener('error', (error) => {
+audio.addEventListener('error', () => {
   playerStore.stop()
   executor.stop()
   const currIndex = playlistStore.getCurrIndex
@@ -148,9 +148,16 @@ function prev() {
 }
 
 // provide('play', readonly(play))
-const playObj = inject('play')
-playObj.play1 = play
-playObj.stop = stop
+const playObj = inject<{
+  play: (index: number) => Promise<void>,
+  play1: (index: number) => Promise<void>,
+  stop: () => void
+}>('play')
+
+if (playObj !== undefined) {
+  playObj.play1 = play
+  playObj.stop = stop
+}
 
 watchSyncEffect(() => {
   const canplay = playerStore.isCanplay

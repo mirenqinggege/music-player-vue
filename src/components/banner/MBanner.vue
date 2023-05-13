@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import {BannerItem} from '@/types'
-import {onMounted, Ref, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import {AntiShake} from '@/util/common'
 import {getBannerStore} from '@/store'
 

@@ -126,7 +126,7 @@ watchPostEffect(() => {
             alert(data.message)
             return cookieStore.setCookie(data.cookie)
           }).then(() => {
-            emits('login-success')
+            emits('loginSuccess')
             handlerClose()
           }).catch(({code, message}) => {
             console.log(code, message)

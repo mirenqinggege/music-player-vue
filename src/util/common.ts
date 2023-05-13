@@ -27,16 +27,6 @@ export function toHump(str: string): string {
     .replace(/[_-](\w)/g, (all, char) => char.toUpperCase())
 }
 
-export function getCookieFromStr(cookie: string, name: string): string {
-  const strings = cookie.split(';')
-  const s = strings.find(value => value.trim().startsWith(name))
-  if (s) {
-    const [key, value] = s.split('=')
-    return value
-  }
-  return ''
-}
-
 export function formatDate(date: Date | string | number | undefined, format: string) {
   if (typeof date === 'number' || typeof date === 'string') {
     return formatDate(new Date(date), format)
@@ -91,7 +81,7 @@ export function second2minute(s: number | undefined): string {
 }
 
 export function newInterval(ms: number, task?: Function) {
-  let index: NodeJS.Timer | undefined
+  let index: NodeJS.Timer | number | undefined
   return {
     start(callable?: Function) {
       if (index !== undefined) {
@@ -132,7 +122,7 @@ export function deepClone<T>(obj: T, hash = new WeakMap()) {
   if (hash.get(obj)) {
     return hash.get(obj)
   }
-  let cloneObj = new obj.constructor()
+  let cloneObj = obj.constructor()
   // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身
   hash.set(obj, cloneObj)
   objForEach(obj, (k, v) => {
@@ -141,10 +131,16 @@ export function deepClone<T>(obj: T, hash = new WeakMap()) {
   return cloneObj
 }
 
-export function numFormat(num: number): string {
-  if (num > 9999) {
+export function numFormat(num?: number): string {
+  if (typeof num === 'undefined') {
+    return '0'
+  } else if (num > 9999) {
     return Math.floor(num * 0.0001) + '万'
   } else {
     return num + ''
   }
+}
+
+export function ifUndefined<T>(obj: T, defaultVal: any, wrapper = (obj: T) => <any>obj) {
+  return typeof obj === 'undefined' ? defaultVal : wrapper(obj)
 }

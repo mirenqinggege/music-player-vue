@@ -3,6 +3,7 @@ import {join} from 'path'
 import request from '../src/util/request.js'
 import Accelerator = Electron.Accelerator
 import {existsSync} from 'fs'
+import createProtocol from './createProtocol'
 
 Menu.setApplicationMenu(null)
 
@@ -23,7 +24,7 @@ async function createWindow() {
   }
   const browserWindow: BrowserWindow = new BrowserWindow(config)
   const path = '/home/zkh/project/devtools-6.4.5/packages/shell-chrome'
-  if (existsSync(path)) {
+  if (!app.isPackaged && existsSync(path)) {
     session.defaultSession.loadExtension(path, {allowFileAccess: true}).then()
   }
   browserWindow.on('ready-to-show', () => {
@@ -38,6 +39,10 @@ async function createWindow() {
 
 app.whenReady().then(async () => {
   mainWin = await createWindow()
+  if (app.isPackaged) {
+    createProtocol('app')
+    return mainWin.loadURL('app://./index.html')
+  }
   return mainWin.loadURL(process.env.VITE_DEV_SERVER_URL)
 }).then(() => {
   console.log('success')
