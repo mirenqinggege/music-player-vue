@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {UserInfo, UserDetail} from '@/types'
+import {UserDetail, UserInfo} from '@/types'
 import {getLoginUserInfo, getUserDetail} from '@/api/user'
 import {store} from '@/store'
 

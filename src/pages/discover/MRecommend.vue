@@ -1,18 +1,17 @@
 <template>
-  <div class="m-recommend">
+<div class="m-recommend">
     <m-banner ref="mBanner" :banner-list="bannerList"/>
     <div class="list-content">
-      <m-group label="推荐歌单">
-        <div class="d-flex flex-wrap justify-content-between">
-          <template v-for="(item) in recommendSongList">
-            <m-card width="19%" :id="item.id" :text="item.name" :image="item.picUrl"/>
-          </template>
-        </div>
-      </m-group>
+        <m-group label="推荐歌单">
+            <div class="d-flex flex-wrap justify-content-between">
+                <template v-for="(item) in recommendSongList">
+                    <m-card :id="item.id" :image="item.picUrl" :text="item.name" width="19%"/>
+                </template>
+            </div>
+        </m-group>
     </div>
-  </div>
+</div>
 </template>
-
 <script lang="ts" setup>
 import MBanner from '@/components/banner/MBanner.vue'
 import {BannerItem, SongList} from '@/types'

@@ -1,19 +1,19 @@
 <template>
-  <div class="m-temp-play-list" v-show="show">
+<div v-show="show" class="m-temp-play-list">
     <div class="m-play-list-header">
-      <div class="m-play-list-title">当前播放</div>
-      <div class="m-play-list-options">
-        <small>总0首</small>
-        <div class="options">
-          <div class="option" @click="playlistStore.clear">清空列表</div>
+        <div class="m-play-list-title">当前播放</div>
+        <div class="m-play-list-options">
+            <small>总0首</small>
+            <div class="options">
+                <div class="option" @click="playlistStore.clear">清空列表</div>
+            </div>
         </div>
-      </div>
-      <hr/>
+        <hr/>
     </div>
     <div class="list">
-      <m-table row-key="id" :columns="columns" :data-source="dataSource"/>
+        <m-table :columns="columns" :data-source="dataSource" row-key="id"/>
     </div>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>

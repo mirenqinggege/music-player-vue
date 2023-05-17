@@ -87,7 +87,8 @@ export function newInterval(ms: number, task?: Function) {
       if (index !== undefined) {
         throw new Error('this interval is running')
       }
-      index = setInterval(callable !== undefined ? callable : (task || (() => {})), ms)
+      index = setInterval(callable !== undefined ? callable : (task || (() => {
+      })), ms)
     },
     stop() {
       clearInterval(index)

@@ -1,11 +1,12 @@
 import * as encrypt from './crypto'
+import config from './config.json'
+
 const axios = require('axios')
 const PacProxyAgent = require('pac-proxy-agent')
 const http = require('http')
 const https = require('https')
 const tunnel = require('tunnel')
-const { URLSearchParams, URL } = require('url')
-import config from './config.json'
+const {URLSearchParams, URL} = require('url')
 // request.debug = true // 开启可看到更详细信息
 
 const chooseUserAgent = (ua = false) => {
@@ -22,7 +23,7 @@ const chooseUserAgent = (ua = false) => {
       'Mozilla/5.0 (Linux; U; Android 9; zh-cn; Redmi Note 8 Build/PKQ1.190616.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.141 Mobile Safari/537.36 XiaoMi/MiuiBrowser/12.5.22',
       // Android + qq micromsg
       'Mozilla/5.0 (Linux; Android 10; YAL-AL00 Build/HUAWEIYAL-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.62 XWEB/2581 MMWEBSDK/200801 Mobile Safari/537.36 MMWEBID/3027 MicroMessenger/7.0.18.1740(0x27001235) Process/toolsmp WeChat/arm64 NetType/WIFI Language/zh_CN ABI/arm64',
-      'Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BKK-AL10 Build/HONORBKK-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/10.6 Mobile Safari/537.36',
+      'Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BKK-AL10 Build/HONORBKK-AL10) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/10.6 Mobile Safari/537.36'
     ],
     pc: [
       // macOS 10.15.6  Firefox / Chrome / Safari
@@ -32,9 +33,9 @@ const chooseUserAgent = (ua = false) => {
       // Windows 10 Firefox / Chrome / Edge
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0',
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.30 Safari/537.36',
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/13.10586'
       // Linux 就算了
-    ],
+    ]
   }
   let realUserAgentList =
     userAgentList[ua] || userAgentList.mobile.concat(userAgentList.pc)
@@ -44,7 +45,7 @@ const chooseUserAgent = (ua = false) => {
 }
 const createRequest = (method, url, data = {}, options) => {
   return new Promise((resolve, reject) => {
-    let headers = { 'User-Agent': chooseUserAgent(options.ua) }
+    let headers = {'User-Agent': chooseUserAgent(options.ua)}
     if (method.toUpperCase() === 'POST')
       headers['Content-Type'] = 'application/x-www-form-urlencoded'
     if (url.includes('music.163.com'))
@@ -68,7 +69,7 @@ const createRequest = (method, url, data = {}, options) => {
           (key) =>
             encodeURIComponent(key) +
             '=' +
-            encodeURIComponent(options.cookie[key]),
+            encodeURIComponent(options.cookie[key])
         )
         .join('; ')
     } else if (options.cookie) {
@@ -84,7 +85,7 @@ const createRequest = (method, url, data = {}, options) => {
       data = encrypt.linuxapi({
         method: method,
         url: url.replace(/\w*api/, 'api'),
-        params: data,
+        params: data
       })
       headers['User-Agent'] =
         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36'
@@ -105,28 +106,28 @@ const createRequest = (method, url, data = {}, options) => {
         channel: cookie.channel,
         requestId: `${Date.now()}_${Math.floor(Math.random() * 1000)
           .toString()
-          .padStart(4, '0')}`,
+          .padStart(4, '0')}`
       }
       if (cookie.MUSIC_U) header['MUSIC_U'] = cookie.MUSIC_U
       if (cookie.MUSIC_A) header['MUSIC_A'] = cookie.MUSIC_A
       headers['Cookie'] = Object.keys(header)
         .map(
           (key) =>
-            encodeURIComponent(key) + '=' + encodeURIComponent(header[key]),
+            encodeURIComponent(key) + '=' + encodeURIComponent(header[key])
         )
         .join('; ')
       data.header = header
       data = encrypt.eapi(options.url, data)
       url = url.replace(/\w*api/, 'eapi')
     }
-    const answer = { status: 500, body: {}, cookie: [] }
+    const answer = {status: 500, body: {}, cookie: []}
     let settings = {
       method: method,
       url: url,
       headers: headers,
       data: new URLSearchParams(data).toString(),
-      httpAgent: new http.Agent({ keepAlive: true }),
-      httpsAgent: new https.Agent({ keepAlive: true }),
+      httpAgent: new http.Agent({keepAlive: true}),
+      httpsAgent: new https.Agent({keepAlive: true})
     }
 
     if (options.crypto === 'eapi') settings.encoding = null
@@ -141,8 +142,8 @@ const createRequest = (method, url, data = {}, options) => {
           const agent = tunnel.httpsOverHttp({
             proxy: {
               host: purl.hostname,
-              port: purl.port || 80,
-            },
+              port: purl.port || 80
+            }
           })
           settings.httpsAgent = agent
           settings.httpAgent = agent
@@ -157,14 +158,14 @@ const createRequest = (method, url, data = {}, options) => {
     if (options.crypto === 'eapi') {
       settings = {
         ...settings,
-        responseType: 'arraybuffer',
+        responseType: 'arraybuffer'
       }
     }
     axios(settings)
       .then((res) => {
         const body = res.data
         answer.cookie = (res.headers['set-cookie'] || []).map((x) =>
-          x.replace(/\s*Domain=[^(;|$)]+;*/, ''),
+          x.replace(/\s*Domain=[^(;|$)]+;*/, '')
         )
         try {
           if (options.crypto === 'eapi') {
@@ -200,7 +201,7 @@ const createRequest = (method, url, data = {}, options) => {
       })
       .catch((err) => {
         answer.status = 502
-        answer.body = { code: 502, msg: err }
+        answer.body = {code: 502, msg: err}
         reject(answer)
       })
   })

@@ -1,25 +1,33 @@
-import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router'
+
+import MRecommend from '@/pages/discover/MRecommend.vue'
+import Temp from '@/pages/temp.vue'
+import Index from '@/pages/index.vue'
+import MDiscoverMusic from '@/pages/discover/MDiscoverMusic.vue'
+import MPlayList from '@/pages/playlist/MPlayList.vue'
+import MLayout from '@/components/layout/MLayout.vue'
+
 
 const discoverMusicChild: Array<RouteRecordRaw> = [
   {
     name: 'recommend',
     path: 'recommend',
-    component: () => import('@/pages/discover/MRecommend.vue')
+    component: MRecommend
   },
   {
     name: 'list',
     path: 'list',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   },
   {
     name: 'playlist',
     path: 'playlist',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   },
   {
     name: 'customize',
     path: 'customize',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   }
 ]
 
@@ -27,44 +35,44 @@ const children: Array<RouteRecordRaw> = [
   {
     name: 'index',
     path: 'index',
-    component: () => import('@/pages/index.vue')
+    component: Index
   },
   {
     name: 'discover',
     path: 'discover',
     redirect: {name: 'recommend'},
-    component: () => import('@/pages/discover/MDiscoverMusic.vue'),
+    component: MDiscoverMusic,
     children: discoverMusicChild
   },
   {
     name: 'play-list',
     path: 'play-list/:id',
-    component: () => import('@/pages/playlist/MPlayList.vue')
+    component: MPlayList
   },
   {
     name: 'podcasts',
     path: 'podcasts',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   },
   {
     name: 'video',
     path: 'video',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   },
   {
     name: 'concern',
     path: 'concern',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   },
   {
     name: 'live',
     path: 'live',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   },
   {
     name: 'private-fm',
     path: 'private-fm',
-    component: () => import('@/pages/temp.vue')
+    component: Temp
   }
 ]
 
@@ -73,13 +81,13 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     path: '/',
     redirect: {path: '/discover'},
-    component: () => import('@/components/layout/MLayout.vue'),
+    component: MLayout,
     children
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
   scrollBehavior: () => ({
     top: 0,

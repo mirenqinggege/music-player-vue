@@ -1,24 +1,24 @@
 <template>
-  <div class="m-user-profile">
+<div class="m-user-profile">
     <div class="profile">
-      <img v-if="!hasCookie" src="@/assets/userProfile.png" alt=""/>
-      <img v-if="hasCookie" :src="loginUser?.avatarUrl" :alt="loginUser?.nickname">
+        <img v-if="!hasCookie" alt="" src="@/assets/userProfile.png"/>
+        <img v-if="hasCookie" :alt="loginUser?.nickname" :src="loginUser?.avatarUrl">
     </div>
     <div v-if="!hasCookie" class="login-please" @click.stop="handlerShowLogin">
-      请登录
+        请登录
     </div>
     <div v-if="hasCookie" @click.stop="handlerShowUserControl">
-      {{ loginUser?.nickname }}
+        {{ loginUser?.nickname }}
     </div>
     <div class="icon">
-      <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-           width="14" height="14" fill="currentColor">
-        <path d="M941.808046 195.931415 512 828.068585 82.191954 195.931415Z"></path>
-      </svg>
+        <svg class="icon" fill="currentColor" height="14" version="1.1"
+             viewBox="0 0 1024 1024" width="14" xmlns="http://www.w3.org/2000/svg">
+            <path d="M941.808046 195.931415 512 828.068585 82.191954 195.931415Z"></path>
+        </svg>
     </div>
     <m-user-control v-model:show="userControlShow"/>
-  </div>
-  <m-login-modal @login-success="handlerLoginSuccess" v-model:show="loginShow"/>
+</div>
+<m-login-modal v-model:show="loginShow" @login-success="handlerLoginSuccess"/>
 </template>
 
 <script lang="ts" setup>

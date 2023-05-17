@@ -1,9 +1,8 @@
 import {app, BrowserWindow, globalShortcut, ipcMain, Menu, session} from 'electron'
 import {join} from 'path'
 import request from '../src/util/request.js'
-import Accelerator = Electron.Accelerator
 import {existsSync} from 'fs'
-import createProtocol from './createProtocol'
+
 
 Menu.setApplicationMenu(null)
 
@@ -29,19 +28,33 @@ async function createWindow() {
   }
   browserWindow.on('ready-to-show', () => {
     browserWindow.show()
-    browserWindow.webContents.toggleDevTools()
-    globalShortcut.register(<Accelerator>'F12', () => {
-      browserWindow.webContents.toggleDevTools()
-    })
   })
   return browserWindow
 }
 
+app.on('browser-window-blur', () => {
+  if (globalShortcut.isRegistered('F12')) {
+    globalShortcut.unregister('F12')
+  }
+})
+
+app.on('browser-window-focus', () => {
+  if (!globalShortcut.isRegistered('F12')) {
+    globalShortcut.register('F12', () => {
+      mainWin?.webContents.openDevTools()
+    })
+  }
+})
+
+app.on('window-all-closed', () => {
+  if (globalShortcut.isRegistered('F12')) {
+    globalShortcut.unregister('F12')
+  }
+})
 app.whenReady().then(async () => {
   mainWin = await createWindow()
   if (app.isPackaged) {
-    createProtocol('app')
-    return mainWin.loadURL('app://./index.html')
+    return mainWin.loadFile(join(__dirname, '../dist/index.html'))
   }
   return mainWin.loadURL(process.env.VITE_DEV_SERVER_URL)
 }).then(() => {

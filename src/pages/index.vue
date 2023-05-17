@@ -1,5 +1,5 @@
 <template>
-  <div class="m-index"></div>
+<div class="m-index"></div>
 </template>
 
 <script lang="ts" setup>

@@ -1,16 +1,19 @@
 <template>
-  <div id="m-discover-music">
+<div id="m-discover-music">
     <div class="nav">
-      <template v-for="item in navList" :key="item.key">
-        <router-link custom v-slot="{navigate, isActive}" :to="{name: item.routeName}">
-          <div @click="navigate" :class="isActive ? ['nav-item', 'active'] : ['nav-item']">{{ item.label }}</div>
-        </router-link>
-      </template>
+        <template v-for="item in navList" :key="item.key">
+            <router-link v-slot="{navigate, isActive}" :to="{name: item.routeName}" custom>
+                <div :class="isActive ? ['nav-item', 'active'] : ['nav-item']" @click="navigate">{{
+										item.label
+                    }}
+                </div>
+            </router-link>
+        </template>
     </div>
     <div id="content">
-      <router-view/>
+        <router-view/>
     </div>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -20,7 +23,7 @@ const navList: MenuItem[] = [
   {routeName: 'recommend', label: '个性推荐', key: 'discover-nav-item-recommend'},
   {routeName: 'customize', label: '专属定制', key: 'discover-nav-item-customize'},
   {routeName: 'playlist', label: '歌单', key: 'discover-nav-item-playlist'},
-  {routeName: 'list', label: '排行榜', key: 'discover-nav-item-list'},
+  {routeName: 'list', label: '排行榜', key: 'discover-nav-item-list'}
 ]
 </script>
 

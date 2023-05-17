@@ -1,40 +1,40 @@
 <template>
-  <div class="m-table">
-    <div class="m-table-header" v-if="showHeader">
-      <template v-for="(item, index) in columns" :key="`m-table-header-column-${Date.now()}-${index}`">
-        <div v-if="item.index"
-             :style="cellStyle(item)"
-             :class="['m-table-column', `_${index}`]">{{ item.label }}
-        </div>
-        <div v-else :style="cellStyle(item)"
-             :class="['m-table-column', `_${index}`]">{{ item.label }}
-        </div>
-      </template>
+<div class="m-table">
+    <div v-if="showHeader" class="m-table-header">
+        <template v-for="(item, index) in columns" :key="`m-table-header-column-${Date.now()}-${index}`">
+            <div v-if="item.index"
+                 :class="['m-table-column', `_${index}`]"
+                 :style="cellStyle(item)">{{ item.label }}
+            </div>
+            <div v-else :class="['m-table-column', `_${index}`]"
+                 :style="cellStyle(item)">{{ item.label }}
+            </div>
+        </template>
     </div>
     <div class="m-table-body">
-      <template v-for="(item, index) in dataSource" :key="`m-table-body-row-${index}-${item[rowKey]}`">
-        <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '', isPlaying(item)]"
-             @click.stop="handlerClickRow(item, index)" @dblclick.stop="handlerDbclickRow(item, index)">
-          <template v-for="(cell, i) in columns" :key="`m-table-body-column-${index}-${item[rowKey]}`">
-            <div :style="cellStyle(cell)"
-                 v-if="cell.index"
-                 :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[ifUndefined(cell.dataIndex, '')], item, dataSource)]">
-              <component v-if="cell.format !== undefined"
-                         :is="cell.format(item[ifUndefined(cell.dataIndex, '')], item, index)"></component>
-              <template v-else>{{ index + 1 }}</template>
+        <template v-for="(item, index) in dataSource" :key="`m-table-body-row-${index}-${item[rowKey]}`">
+            <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '', isPlaying(item)]"
+                 @click.stop="handlerClickRow(item, index)" @dblclick.stop="handlerDbclickRow(item, index)">
+                <template v-for="(cell, i) in columns" :key="`m-table-body-column-${index}-${item[rowKey]}`">
+                    <div v-if="cell.index"
+                         :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[ifUndefined(cell.dataIndex, '')], item, dataSource)]"
+                         :style="cellStyle(cell)">
+                        <component :is="cell.format(item[ifUndefined(cell.dataIndex, '')], item, index)"
+                                   v-if="cell.format !== undefined"></component>
+                        <template v-else>{{ index + 1 }}</template>
+                    </div>
+                    <div v-else
+                         :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[ifUndefined(cell.dataIndex, '')], item, dataSource)]"
+                         :style="cellStyle(cell)">
+                        <component :is="cell.format(item[ifUndefined(cell.dataIndex, '')], item, index)"
+                                   v-if="cell.format !== undefined"></component>
+                        <template v-else>{{ item[ifUndefined(cell.dataIndex, '')] }}</template>
+                    </div>
+                </template>
             </div>
-            <div v-else
-                 :style="cellStyle(cell)"
-                 :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[ifUndefined(cell.dataIndex, '')], item, dataSource)]">
-              <component v-if="cell.format !== undefined"
-                         :is="cell.format(item[ifUndefined(cell.dataIndex, '')], item, index)"></component>
-              <template v-else>{{ item[ifUndefined(cell.dataIndex, '')] }}</template>
-            </div>
-          </template>
-        </div>
-      </template>
+        </template>
     </div>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>

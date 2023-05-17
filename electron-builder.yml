@@ -14,7 +14,4 @@ files:
 linux:
   maintainer: "zkh"
   target:
-    - target: "AppImage"
-      arch:
-        - "x64"
-
+    - target: "snap"
