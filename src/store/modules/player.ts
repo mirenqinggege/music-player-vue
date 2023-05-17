@@ -32,7 +32,7 @@ const usePlayerStore = defineStore('playerStore', {
       this.songTimeLength = songInfo.dt
       this.currPlayProgress = 0
     },
-    async load(): string {
+    async load(): Promise<string> {
       this.playStatus = 'loading'
       const {data: [songDetail]} = await getSongDetail(this.songInfo?.id)
       this.songDetail = songDetail

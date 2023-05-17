@@ -1,16 +1,16 @@
 <template>
-  <div id="m-banner" ref="banner">
+<div id="m-banner" ref="banner">
     <template v-for="item in bannerList" :key="item.key">
-      <div class="banner-item" ref="bannerItem">
-        <img :src="item.cover" alt="">
-      </div>
+        <div ref="bannerItem" class="banner-item">
+            <img :src="item.cover" alt="">
+        </div>
     </template>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>
 import {BannerItem} from '@/types'
-import {onMounted, Ref, ref} from 'vue'
+import {onMounted, ref} from 'vue'
 import {AntiShake} from '@/util/common'
 import {getBannerStore} from '@/store'
 

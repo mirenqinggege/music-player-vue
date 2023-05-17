@@ -9,7 +9,7 @@ const srcPath = resolve(__dirname, 'src')
 
 const electronConfig: Configuration[] = [
   {entry: './electron/main.ts'},
-  {entry: './electron/preload.ts'},
+  {entry: './electron/preload.ts'}
 ]
 
 export default defineConfig({

@@ -1,13 +1,13 @@
 <template>
-  <div class="m-song">
-    <div class="cover" v-if="cover">
-      <img :src="cover" alt="">
+<div class="m-song">
+    <div v-if="cover" class="cover">
+        <img :src="cover" alt="">
     </div>
     <div class="m-text-info">
-      <div class="name" :title="name">{{ name }}</div>
-      <div class="artist">{{ artist }}</div>
+        <div :title="name" class="name">{{ name }}</div>
+        <div class="artist">{{ artist }}</div>
     </div>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>

@@ -1,3 +1,3 @@
-export interface Response extends Record<string, any>{
+export interface Response extends Record<string, any> {
   code: number
 }

@@ -1,64 +1,68 @@
 <template>
-  <div class="m-layout vertical">
+<div class="m-layout vertical">
     <div id="m-header">
-      <div id="logo-wrapper"></div>
-      <m-step-control/>
-      <m-search-input/>
-      <div id="drag-area">
-        <div class="drag"></div>
-        <m-user-profile @reload="handlerReload"/>
-        <m-window-control/>
-      </div>
+        <div id="logo-wrapper"></div>
+        <m-step-control/>
+        <m-search-input/>
+        <div id="drag-area">
+            <div class="drag"></div>
+            <m-user-profile @reload="handlerReload"/>
+            <m-window-control/>
+        </div>
     </div>
     <div class="m-layout">
-      <div id="side">
-        <div class="fixed">
-          <template v-for="(item) in fixedMenu" :key="item.key">
-            <router-link replace exact-active-class="active" v-slot="{navigate, isActive}" custom :to="{name: item.routeName}">
-              <div :class="isActive ? ['menu-item', 'active'] : ['menu-item']" @click="navigate">{{ item.label }}</div>
-            </router-link>
-          </template>
-        </div>
-        <div id="my-song-list">
-          <span class="title">我的音乐</span>
+        <div id="side">
+            <div class="fixed">
+                <template v-for="(item) in fixedMenu" :key="item.key">
+                    <router-link v-slot="{navigate, isActive}" :to="{name: item.routeName}" custom
+                                 exact-active-class="active"
+                                 replace>
+                        <div :class="isActive ? ['menu-item', 'active'] : ['menu-item']" @click="navigate">
+                            {{ item.label }}
+                        </div>
+                    </router-link>
+                </template>
+            </div>
+            <div id="my-song-list">
+                <span class="title">我的音乐</span>
 
-          <template v-for="item in playlist" :key="String(item.id)">
-            <router-link replace :to="{path: `/play-list/${item.id}`}" custom v-slot="{navigate, isActive}">
-              <div :class="isActive ? ['playlist', 'active'] : ['playlist']" @click="navigate">
-                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     xmlns="http://www.w3.org/2000/svg" width="30" height="30">
-                  <path
-                    d="M717.12 394.88v12.592h-0.32v218.656h-48v-48h0.32V397.616a11.248 11.248 0 0 1-0.08-1.28v-36.864h48v34.752l0.08 0.64zM648.528 748.8h-68.256a85.328 85.328 0 1 1 0-170.672h88.848V397.616a11.248 11.248 0 0 1-0.08-1.28V336a48 48 0 0 1 48-48h71.232a48 48 0 0 1 48 48v23.472a48 48 0 0 1-48 48H716.8v273.056a68.272 68.272 0 0 1-68.272 68.272z m-67.2-122.704a37.344 37.344 0 0 0 0 74.688h71.504a16 16 0 0 0 16-16V626.08h-87.488zM716.912 336v23.568h71.36V336h-71.36z m-529.76-48H580.88c6.16 0 11.136 4.976 11.136 11.136v25.728A11.136 11.136 0 0 1 580.88 336H187.136A11.136 11.136 0 0 1 176 324.864v-25.728c0-6.16 4.976-11.136 11.136-11.136zM580.88 464c-15.84 0-29.328 9.984-34.56 24 5.232 14.016 18.72 24 34.56 24H187.136c15.84 0 29.328-9.984 34.56-24a36.88 36.88 0 0 0-34.56-24h393.728z m-393.728 0H580.88c6.16 0 11.136 4.976 11.136 11.136v25.728A11.136 11.136 0 0 1 580.88 512H187.136A11.136 11.136 0 0 1 176 500.864v-25.728c0-6.16 4.976-11.136 11.136-11.136z m0 192H404.88c6.16 0 11.136 4.976 11.136 11.136v25.728A11.136 11.136 0 0 1 404.88 704H187.136A11.136 11.136 0 0 1 176 692.864v-25.728c0-6.16 4.976-11.136 11.136-11.136z"
-                  ></path>
-                </svg>
-                {{ item.name }}
-              </div>
-            </router-link>
-          </template>
+                <template v-for="item in playlist" :key="String(item.id)">
+                    <router-link v-slot="{navigate, isActive}" :to="{path: `/play-list/${item.id}`}" custom replace>
+                        <div :class="isActive ? ['playlist', 'active'] : ['playlist']" @click="navigate">
+                            <svg class="icon" height="30" version="1.1"
+                                 viewBox="0 0 1024 1024" width="30" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                        d="M717.12 394.88v12.592h-0.32v218.656h-48v-48h0.32V397.616a11.248 11.248 0 0 1-0.08-1.28v-36.864h48v34.752l0.08 0.64zM648.528 748.8h-68.256a85.328 85.328 0 1 1 0-170.672h88.848V397.616a11.248 11.248 0 0 1-0.08-1.28V336a48 48 0 0 1 48-48h71.232a48 48 0 0 1 48 48v23.472a48 48 0 0 1-48 48H716.8v273.056a68.272 68.272 0 0 1-68.272 68.272z m-67.2-122.704a37.344 37.344 0 0 0 0 74.688h71.504a16 16 0 0 0 16-16V626.08h-87.488zM716.912 336v23.568h71.36V336h-71.36z m-529.76-48H580.88c6.16 0 11.136 4.976 11.136 11.136v25.728A11.136 11.136 0 0 1 580.88 336H187.136A11.136 11.136 0 0 1 176 324.864v-25.728c0-6.16 4.976-11.136 11.136-11.136zM580.88 464c-15.84 0-29.328 9.984-34.56 24 5.232 14.016 18.72 24 34.56 24H187.136c15.84 0 29.328-9.984 34.56-24a36.88 36.88 0 0 0-34.56-24h393.728z m-393.728 0H580.88c6.16 0 11.136 4.976 11.136 11.136v25.728A11.136 11.136 0 0 1 580.88 512H187.136A11.136 11.136 0 0 1 176 500.864v-25.728c0-6.16 4.976-11.136 11.136-11.136z m0 192H404.88c6.16 0 11.136 4.976 11.136 11.136v25.728A11.136 11.136 0 0 1 404.88 704H187.136A11.136 11.136 0 0 1 176 692.864v-25.728c0-6.16 4.976-11.136 11.136-11.136z"
+                                ></path>
+                            </svg>
+                            {{ item.name }}
+                        </div>
+                    </router-link>
+                </template>
+            </div>
         </div>
-      </div>
-      <div id="content">
-        <router-view/>
-      </div>
+        <div id="content">
+            <router-view/>
+        </div>
     </div>
     <div id="m-footer">
-      <m-player @progress="handlerProgress" @time-change="handlerTimeChange" custom-class="m-player">
-        <template
-          v-slot="{songInfo: {al, name, ar}, currentTime, totalTime, progress, play, pause, next, prev, playStatus}">
-          <m-song :cover="al?.picUrl" :name="name" :artist="ar?.[0]?.name" :liked="false"/>
-          <m-player-control
-            :play-status="playStatus"
-            :play="play"
-            :pause="pause"
-            :next="next"
-            :prev="prev"
-            :current-time="currentTime"
-            :total-time="totalTime"
-            :progress-value="progress"/>
-        </template>
-      </m-player>
+        <m-player custom-class="m-player" @progress="handlerProgress" @time-change="handlerTimeChange">
+            <template
+                    v-slot="{songInfo: {al, name, ar}, currentTime, totalTime, progress, play, pause, next, prev, playStatus}">
+                <m-song :artist="ar?.[0]?.name" :cover="al?.picUrl" :liked="false" :name="name"/>
+                <m-player-control
+                        :current-time="currentTime"
+                        :next="next"
+                        :pause="pause"
+                        :play="play"
+                        :play-status="playStatus"
+                        :prev="prev"
+                        :progress-value="progress"
+                        :total-time="totalTime"/>
+            </template>
+        </m-player>
     </div>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>
@@ -96,12 +100,10 @@ function handlerReload() {
   mySongListStore.fetchMySongList()
 }
 
-function handlerProgress(obj) {
-  // console.log(obj)
+function handlerProgress() {
 }
 
-function handlerTimeChange(obj, obj2) {
-  // console.log(obj, obj2)
+function handlerTimeChange() {
 }
 
 const play = reactive({play: () => undefined})
@@ -186,6 +188,7 @@ provide('play', play)
     height: var(--footer-height);
     border-top: 1px solid var(--primary-color-border);
     box-sizing: border-box;
+
     .m-player {
       width: 100%;
       height: 100%;
@@ -251,6 +254,6 @@ provide('play', play)
 </style>
 <style>
 .play-this .track-name {
-  color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
 }
 </style>

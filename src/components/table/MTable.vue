@@ -1,49 +1,48 @@
 <template>
-  <div class="m-table">
-    <div class="m-table-header" v-if="showHeader">
-      <template v-for="(item, index) in columns" :key="`m-table-header-column-${Date.now()}-${index}`">
-        <div v-if="item.index"
-             :style="{width: item.width === undefined ? columnWidth: `${item.width}px`, textAlign: item.align}"
-             :class="['m-table-column', `_${index}`]">{{ item.label }}
-        </div>
-        <div v-else :style="{width: item.width === undefined ? columnWidth: `${item.width}px`, textAlign: item.align}"
-             :class="['m-table-column', `_${index}`]">{{ item.label }}
-        </div>
-      </template>
+<div class="m-table">
+    <div v-if="showHeader" class="m-table-header">
+        <template v-for="(item, index) in columns" :key="`m-table-header-column-${Date.now()}-${index}`">
+            <div v-if="item.index"
+                 :class="['m-table-column', `_${index}`]"
+                 :style="cellStyle(item)">{{ item.label }}
+            </div>
+            <div v-else :class="['m-table-column', `_${index}`]"
+                 :style="cellStyle(item)">{{ item.label }}
+            </div>
+        </template>
     </div>
     <div class="m-table-body">
-      <template v-for="(item, index) in dataSource" :key="`m-table-body-row-${index}-${item[rowKey]}`">
-        <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '', isPlaying(item)]"
-             @click.stop="handlerClickRow(item, index)" @dblclick.stop="handlerDbclickRow(item, index)">
-          <template v-for="(cell, i) in columns" :key="`m-table-body-column-${index}-${item[rowKey]}`">
-            <div :style="{width: cell.width === undefined ? columnWidth: `${cell.width}px`, textAlign: cell.align}"
-                 v-if="cell.index"
-                 :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[cell.dataIndex], item, dataSource)]">
-              <component v-if="cell.format !== undefined"
-                         :is="cell.format(item[cell.dataIndex], item, index)"></component>
-              <template v-else>{{ index + 1 }}</template>
+        <template v-for="(item, index) in dataSource" :key="`m-table-body-row-${index}-${item[rowKey]}`">
+            <div :class="['m-table-row', index % 2 !== 0 ? 'odd' : '', selectionFlag[index] ? 'active': '', isPlaying(item)]"
+                 @click.stop="handlerClickRow(item, index)" @dblclick.stop="handlerDbclickRow(item, index)">
+                <template v-for="(cell, i) in columns" :key="`m-table-body-column-${index}-${item[rowKey]}`">
+                    <div v-if="cell.index"
+                         :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[ifUndefined(cell.dataIndex, '')], item, dataSource)]"
+                         :style="cellStyle(cell)">
+                        <component :is="cell.format(item[ifUndefined(cell.dataIndex, '')], item, index)"
+                                   v-if="cell.format !== undefined"></component>
+                        <template v-else>{{ index + 1 }}</template>
+                    </div>
+                    <div v-else
+                         :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[ifUndefined(cell.dataIndex, '')], item, dataSource)]"
+                         :style="cellStyle(cell)">
+                        <component :is="cell.format(item[ifUndefined(cell.dataIndex, '')], item, index)"
+                                   v-if="cell.format !== undefined"></component>
+                        <template v-else>{{ item[ifUndefined(cell.dataIndex, '')] }}</template>
+                    </div>
+                </template>
             </div>
-            <div v-else
-                 :style="{width: cell.width === undefined ? columnWidth: `${cell.width}px`, textAlign: cell.align}"
-                 :class="['m-table-column', `_${i}`, callOrReturn(cell.customClass, item[cell.dataIndex], item, dataSource)]">
-              <component v-if="cell.format !== undefined"
-                         :is="cell.format(item[cell.dataIndex], item, index)"></component>
-              <template v-else>{{ item[cell.dataIndex] }}</template>
-            </div>
-          </template>
-        </div>
-      </template>
+        </template>
     </div>
-  </div>
+</div>
 </template>
 
 <script lang="ts" setup>
-import {computed, reactive, VNode, watchSyncEffect} from 'vue'
+import {computed, reactive, StyleValue, VNode, watchSyncEffect} from 'vue'
 import {UnwrapNestedRefs} from '@vue/reactivity'
-import {callOrReturn} from '@/util/common'
+import {callOrReturn, ifUndefined} from '@/util/common'
 import {getPlayerStore} from '@/store'
 import {equals, Track} from '@/types'
-import {vLoading} from 'element-plus'
 
 interface Props {
   columns: Column[]
@@ -77,12 +76,12 @@ const emits = defineEmits<Emits>()
 const columnWidth = computed(() => {
   const columns = props.columns
   const widths = columns.map(v => v.width)
-  const reduce = widths.reduce(((pre, curr) => pre + (curr === undefined ? 0 : curr)), 0)
+  const reduce = widths.reduce(((pre, curr) => ifUndefined(pre, 0) + (curr === undefined ? 0 : curr)), 0)
   const hasValCount = widths.filter(v => v === undefined)
   return `calc((100% - ${reduce}px) / ${hasValCount.length})`
 })
 
-function handlerClickRow(obj, _that) {
+function handlerClickRow(obj: any, _that: any) {
   if (currentActiveIndex !== undefined) {
     selectionFlag[currentActiveIndex] = false
   }
@@ -91,7 +90,7 @@ function handlerClickRow(obj, _that) {
   emits('rowClick', obj)
 }
 
-function handlerDbclickRow(obj, index) {
+function handlerDbclickRow(obj: any, index: any) {
   emits('rowDoubleClick', obj, index)
 }
 
@@ -125,9 +124,18 @@ const showHeader = computed<boolean>(() => {
 
 watchSyncEffect(() => {
   const dataSource = props.dataSource
-
+  console.debug(dataSource)
   syncSelectionFlag()
 })
+
+//{width: item.width === undefined ? columnWidth: `${item.width}px`, textAlign: item.align}
+
+function cellStyle(column: Column): StyleValue {
+  return {
+    width: ifUndefined(column.width, columnWidth.value, v => `${v}px`),
+    textAlign: ifUndefined(column.align, 'left')
+  }
+}
 </script>
 
 <style lang="less" scoped>

@@ -1,6 +1,6 @@
 import {app, BrowserWindow, globalShortcut, ipcMain, Menu, session} from 'electron'
 import {join} from 'path'
-import request from '@/util/request.js'
+import request from '../src/util/request.js'
 import {existsSync} from 'fs'
 
 

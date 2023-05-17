@@ -1,5 +1,5 @@
 import request from '@/api/request'
-import {PlayList, Response, Song} from '@/types'
+import {PlayList, Response} from '@/types'
 
 interface PlayListResponse extends Response {
   fromUserCount: number
