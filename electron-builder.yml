@@ -10,8 +10,25 @@ files:
   - 'dist'
   - 'dist-electron'
 
+nsis:
+  oneClick: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: false
+  shortcutName: "网易云音乐"
+  runAfterFinish: false
+
+
+win:
+  icon: build/icons
+  maintainer: 'zkh'
+  target:
+    - target: 'nsis'
+    
 
 linux:
   maintainer: "zkh"
+  icon: build/icons
   target:
-    - target: "snap"
+    - target: "deb"
