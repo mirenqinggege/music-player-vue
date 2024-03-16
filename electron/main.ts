@@ -79,6 +79,7 @@ ipcMain.handle('exit', async () => {
   }
 })
 
+
 ipcMain.handle('request', (event, args) => new Promise((resolve) => {
   const promise: Promise<any> = request(...args)
   promise.then((data) => {

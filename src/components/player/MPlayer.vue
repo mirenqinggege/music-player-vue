@@ -118,11 +118,14 @@ async function play(index: number) {
         executor.start()
       })
       .then(() => {
-        navigator.mediaSession.metadata = {
-          album: "", artwork: undefined,
-          artist: playerStore.songInfo.ar?.[0].name,
-          title: playerStore.songInfo.name
-        }
+        const {name: title, ar: [{name: artist}], al: {name: album, picUrl}} = playerStore.getSongInfo;
+        navigator.mediaSession.metadata = new MediaMetadata({
+          album: album || '未知专辑', artwork: [{
+            src: picUrl
+          }],
+          artist: artist || '未知艺术家',
+          title: title || '未知'
+        })
       })
 }
 
@@ -143,7 +146,8 @@ function next() {
   stop()
   playlistStore.offset(1)
       .then(play)
-      .catch(() => {
+      .catch((err) => {
+        console.error(err)
         play(0)
       })
 }
@@ -152,7 +156,8 @@ function prev() {
   stop()
   playlistStore.offset(-1)
       .then(play)
-      .catch(() => {
+      .catch((err) => {
+        console.error(err)
         const number = playlistStore.getPlaylist.length - 1
         play(number)
       })
