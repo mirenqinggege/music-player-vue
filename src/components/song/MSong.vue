@@ -1,16 +1,22 @@
 <template>
-<div class="m-song">
+  <div class="m-song">
     <div v-if="cover" class="cover">
-        <img :src="cover" alt="">
+      <img :src="cover" alt="">
     </div>
     <div class="m-text-info">
-        <div :title="name" class="name">{{ name }}</div>
-        <div class="artist">{{ artist }}</div>
+      <div class="name">
+        <hover-scroll-text :value="name"/>
+      </div>
+      <div class="artist">
+        <hover-scroll-text :value="artist"/>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script lang="ts" setup>
+import HoverScrollText from "@/components/common/HoverScrollText.vue";
+
 interface Props {
   cover: string
   name: string
@@ -41,6 +47,7 @@ withDefaults(defineProps<Props>(), {
 
     img {
       height: 100%;
+      width: 100%;
     }
   }
 

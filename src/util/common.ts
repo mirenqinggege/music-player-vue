@@ -145,3 +145,22 @@ export function numFormat(num?: number): string {
 export function ifUndefined<T>(obj: T, defaultVal: any, wrapper = (obj: T) => <any>obj) {
   return typeof obj === 'undefined' ? defaultVal : wrapper(obj)
 }
+
+/**
+ * 监控元素是否滚动到两端（左端或右端）
+ * @param el
+ * @param event 左端 status 为 1 右端为 0
+ */
+export function scrollEndsEvent(el: HTMLElement | null, event: (status: 1|0) => void) {
+  el?.addEventListener('scroll', () => {
+    const scrollWidth = el.scrollWidth;
+    const scrollLeft = el.scrollLeft;
+    const clientWidth = el.clientWidth;
+    
+    if (scrollLeft <= 0) {
+      event(1)
+    } else if (scrollLeft + clientWidth >= scrollWidth) {
+      event(0)
+    }
+  })
+}
