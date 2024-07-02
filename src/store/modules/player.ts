@@ -53,6 +53,9 @@ const usePlayerStore = defineStore('playerStore', {
         },
         setVolume(volume: number) {
             this.volume = volume
+        },
+        setLoopMethod(method: PlayerStore['loop']) {
+            this.loop = method
         }
     },
     getters: {
@@ -62,7 +65,8 @@ const usePlayerStore = defineStore('playerStore', {
         getSongTimeLength: (state: PlayerStore) => state.songTimeLength,
         getCurrPlayProgress: (state: PlayerStore) => state.currPlayProgress,
         isCanplay: (state: PlayerStore) => state.songDetail !== undefined && ['canplay', 'pause'].includes(state.playStatus),
-        getSongInfo: (state: PlayerStore) => state.songInfo
+        getSongInfo: (state: PlayerStore) => state.songInfo,
+        getLoopMethod: (state: PlayerStore) => state.loop
     },
     persist: {
         enabled: true,

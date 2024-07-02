@@ -49,7 +49,7 @@
 <script lang="ts" setup>
 import {getPlayerStore, getPlaylistStore} from '@/store'
 import {computed, inject, onMounted, ref, watchSyncEffect} from 'vue'
-import {Track} from '@/types'
+import {PlayIndexOutboundException, Track} from '@/types'
 import {newInterval, second2minute} from '@/util/common'
 import MTempPlaylist from '@/components/player/MTempPlaylist.vue'
 import {ElPopover, ElSlider} from 'element-plus'
@@ -73,7 +73,9 @@ const canplayFlag = ref<boolean>(false)
 const playerStore = getPlayerStore()
 const playlistStore = getPlaylistStore()
 
-const playlist = computed<Track[]>(() => playlistStore.getPlaylist)
+const playlist = computed<Track[]>(() => {
+  return playerStore.getLoopMethod === 'list-random' ? playlistStore.getRandomOrder : playlistStore.getPlaylist
+})
 const playStatus = computed<string>(() => playerStore.getPlayStatus)
 const songInfo = computed<Track>(() => playerStore.songInfo || {})
 
@@ -84,7 +86,15 @@ audio.addEventListener('canplay', () => {
 })
 
 audio.addEventListener('ended', () => {
-  next()
+  if (playerStore.getLoopMethod === 'single-loop') {
+    stop()
+    playlistStore.offset(0).then(play).catch((err) => {
+      console.error(err)
+      play(0)
+    })
+  } else {
+    next()
+  }
 })
 
 audio.addEventListener('error', () => {
@@ -159,6 +169,12 @@ function next() {
       .then(play)
       .catch((err) => {
         console.error(err)
+        if (err instanceof PlayIndexOutboundException) {
+          if (playerStore.getLoopMethod === 'list-order') {
+            stop()
+            return
+          }
+        }
         play(0)
       })
 }

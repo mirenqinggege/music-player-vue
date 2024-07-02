@@ -156,11 +156,19 @@ export function scrollEndsEvent(el: HTMLElement | null, event: (status: 1|0) => 
     const scrollWidth = el.scrollWidth;
     const scrollLeft = el.scrollLeft;
     const clientWidth = el.clientWidth;
-    
+
     if (scrollLeft <= 0) {
       event(1)
     } else if (scrollLeft + clientWidth >= scrollWidth) {
       event(0)
     }
   })
+}
+
+export function shuffleArray<T>(array: Array<T>) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
