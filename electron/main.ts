@@ -14,6 +14,7 @@ async function createWindow() {
         width: 1020,
         minWidth: 1020,
         minHeight: 670,
+        icon: join(__dirname, '..', 'build', 'icons', 'icon.ico'),
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
