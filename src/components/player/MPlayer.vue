@@ -20,16 +20,26 @@
         </svg>
       </div>
       <div class="m-btn">
-        <svg v-if="muted" class="icon" fill="currentColor" height="20" version="1.1"
-             viewBox="0 0 1024 1024" width="20" xmlns="http://www.w3.org/2000/svg">
-          <path
-              d="M448 938.666667a21.333333 21.333333 0 0 1-15.093333-6.246667L225.833333 725.333333H53.333333a53.393333 53.393333 0 0 1-53.333333-53.333333V352a53.393333 53.393333 0 0 1 53.333333-53.333333h172.5l207.08-207.086667A21.333333 21.333333 0 0 1 469.333333 106.666667v810.666666a21.333333 21.333333 0 0 1-21.333333 21.333334zM53.333333 341.333333a10.666667 10.666667 0 0 0-10.666666 10.666667v320a10.666667 10.666667 0 0 0 10.666666 10.666667h181.333334a21.333333 21.333333 0 0 1 15.086666 6.246666L426.666667 865.833333V158.166667L249.753333 335.086667A21.333333 21.333333 0 0 1 234.666667 341.333333z m964.42 377.753334a21.333333 21.333333 0 0 0 0-30.173334L840.833333 512l176.92-176.913333a21.333333 21.333333 0 1 0-30.173333-30.173334L810.666667 481.833333 633.753333 304.913333a21.333333 21.333333 0 0 0-30.173333 30.173334L780.5 512l-176.92 176.913333a21.333333 21.333333 0 0 0 30.173333 30.173334L810.666667 542.166667l176.913333 176.92a21.333333 21.333333 0 0 0 30.173333 0z"></path>
-        </svg>
-        <svg v-else class="icon" fill="currentColor" height="20" version="1.1"
-             viewBox="0 0 1024 1024" width="20" xmlns="http://www.w3.org/2000/svg">
-          <path
-              d="M448 938.666667a21.333333 21.333333 0 0 1-15.093333-6.246667L225.833333 725.333333H53.333333a53.393333 53.393333 0 0 1-53.333333-53.333333V352a53.393333 53.393333 0 0 1 53.333333-53.333333h172.5l207.08-207.086667A21.333333 21.333333 0 0 1 469.333333 106.666667v810.666666a21.333333 21.333333 0 0 1-21.333333 21.333334zM53.333333 341.333333a10.666667 10.666667 0 0 0-10.666666 10.666667v320a10.666667 10.666667 0 0 0 10.666666 10.666667h181.333334a21.333333 21.333333 0 0 1 15.086666 6.246666L426.666667 865.833333V158.166667L249.753333 335.086667A21.333333 21.333333 0 0 1 234.666667 341.333333z"></path>
-        </svg>
+        <el-popover :teleported="false" trigger="hover" placement="top" width="50">
+          <template #default>
+            <div>
+              <el-slider height="150px" :min="0" :max="100" vertical v-model="volume"/>
+              <div style="text-align: center">{{ volume }}%</div>
+            </div>
+          </template>
+          <template #reference>
+            <svg @click="handleRestore" v-if="muted" class="icon" fill="currentColor" height="20" version="1.1"
+                 viewBox="0 0 1024 1024" width="20" xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M448 938.666667a21.333333 21.333333 0 0 1-15.093333-6.246667L225.833333 725.333333H53.333333a53.393333 53.393333 0 0 1-53.333333-53.333333V352a53.393333 53.393333 0 0 1 53.333333-53.333333h172.5l207.08-207.086667A21.333333 21.333333 0 0 1 469.333333 106.666667v810.666666a21.333333 21.333333 0 0 1-21.333333 21.333334zM53.333333 341.333333a10.666667 10.666667 0 0 0-10.666666 10.666667v320a10.666667 10.666667 0 0 0 10.666666 10.666667h181.333334a21.333333 21.333333 0 0 1 15.086666 6.246666L426.666667 865.833333V158.166667L249.753333 335.086667A21.333333 21.333333 0 0 1 234.666667 341.333333z m964.42 377.753334a21.333333 21.333333 0 0 0 0-30.173334L840.833333 512l176.92-176.913333a21.333333 21.333333 0 1 0-30.173333-30.173334L810.666667 481.833333 633.753333 304.913333a21.333333 21.333333 0 0 0-30.173333 30.173334L780.5 512l-176.92 176.913333a21.333333 21.333333 0 0 0 30.173333 30.173334L810.666667 542.166667l176.913333 176.92a21.333333 21.333333 0 0 0 30.173333 0z"></path>
+            </svg>
+            <svg @click="handleSilent" v-else class="icon" fill="currentColor" height="20" version="1.1"
+                 viewBox="0 0 1024 1024" width="20" xmlns="http://www.w3.org/2000/svg">
+              <path
+                  d="M448 938.666667a21.333333 21.333333 0 0 1-15.093333-6.246667L225.833333 725.333333H53.333333a53.393333 53.393333 0 0 1-53.333333-53.333333V352a53.393333 53.393333 0 0 1 53.333333-53.333333h172.5l207.08-207.086667A21.333333 21.333333 0 0 1 469.333333 106.666667v810.666666a21.333333 21.333333 0 0 1-21.333333 21.333334zM53.333333 341.333333a10.666667 10.666667 0 0 0-10.666666 10.666667v320a10.666667 10.666667 0 0 0 10.666666 10.666667h181.333334a21.333333 21.333333 0 0 1 15.086666 6.246666L426.666667 865.833333V158.166667L249.753333 335.086667A21.333333 21.333333 0 0 1 234.666667 341.333333z"></path>
+            </svg>
+          </template>
+        </el-popover>
       </div>
     </div>
     <m-temp-playlist/>
@@ -42,6 +52,7 @@ import {computed, inject, onMounted, ref, watchSyncEffect} from 'vue'
 import {Track} from '@/types'
 import {newInterval, second2minute} from '@/util/common'
 import MTempPlaylist from '@/components/player/MTempPlaylist.vue'
+import {ElPopover, ElSlider} from 'element-plus'
 
 interface Props {
   customClass?: string[] | string
@@ -163,6 +174,17 @@ function prev() {
       })
 }
 
+let prevVolume: number
+
+function handleSilent() {
+  prevVolume = playerStore.getVolume
+  playerStore.setVolume(0)
+}
+
+function handleRestore() {
+  playerStore.setVolume(prevVolume)
+}
+
 // provide('play', readonly(play))
 const playObj = inject<{
   play: (index: number) => Promise<void>,
@@ -185,9 +207,17 @@ watchSyncEffect(() => {
 })
 
 watchSyncEffect(() => {
-  audio.volume = playerStore.getVolume
+  audio.volume = playerStore.getVolume / 100
 })
 
+const volume = computed({
+  get() {
+    return playerStore.getVolume
+  },
+  set(val) {
+    playerStore.setVolume(val)
+  }
+})
 const muted = computed(() => playerStore.getVolume === 0)
 
 onMounted(() => {
@@ -224,6 +254,20 @@ onMounted(() => {
   .m-btn {
     cursor: pointer;
     margin: 5px;
+
+    .el-popover.el-popper {
+      min-width: unset;
+      padding-inline: 5px;
+      padding-block: 20px;
+    }
+
+    .el-slider__bar {
+      background-color: #EC4141;
+    }
+
+    .el-slider__button {
+      border-color: #EC4141;
+    }
   }
 }
 </style>
