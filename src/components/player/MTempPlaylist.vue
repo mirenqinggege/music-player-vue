@@ -17,9 +17,10 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, h} from 'vue'
+import {computed, h, inject} from 'vue'
 import MTable, {Column} from '@/components/table/MTable.vue'
 import {getPlaylistStore} from '@/store'
+import {PlayerControl} from "@/types/modules/player.ts";
 
 const columns: Column[] = [
   {
@@ -49,8 +50,10 @@ const columns: Column[] = [
   }
 ]
 
-function handleRowClick(data: any, index: number) {
+const playControl = inject<PlayerControl>('play');
 
+function handleRowClick(data: any, index: number) {
+  playControl.play1(index)
 }
 
 const playlistStore = getPlaylistStore()

@@ -53,6 +53,7 @@ import {PlayIndexOutboundException, Track} from '@/types'
 import {newInterval, second2minute} from '@/util/common'
 import MTempPlaylist from '@/components/player/MTempPlaylist.vue'
 import {ElPopover, ElSlider} from 'element-plus'
+import {PlayerControl} from "@/types/modules/player.ts";
 
 interface Props {
   customClass?: string[] | string
@@ -202,11 +203,7 @@ function handleRestore() {
 }
 
 // provide('play', readonly(play))
-const playObj = inject<{
-  play: (index: number) => Promise<void>,
-  play1: (index: number) => Promise<void>,
-  stop: () => void
-}>('play')
+const playObj = inject<PlayerControl>('play')
 
 if (playObj !== undefined) {
   playObj.play1 = play
