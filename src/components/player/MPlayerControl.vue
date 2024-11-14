@@ -65,7 +65,6 @@ const props = defineProps<Props>()
 
 const width = computed<string>(() => {
   const {progressValue} = props
-  console.log(progressValue)
   if (typeof progressValue === 'string') {
     return progressValue
   } else if (typeof progressValue === 'number') {
