@@ -1,7 +1,7 @@
 nodeVersion: 16.12.0
 appId: "vip.jcfd.music"
 productName: "网易云音乐"
-asar: false
+asar: true
 
 directories:
   output: 'dist_electron'
@@ -12,6 +12,7 @@ files:
 
 
 linux:
+  category: 'AudioVideo'
   maintainer: "zkh"
   target:
     - target: "deb"
