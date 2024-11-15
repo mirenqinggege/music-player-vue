@@ -7,3 +7,10 @@ export * from './modules/song'
 export * from './modules/playlist'
 export * from './modules/song-detail'
 export * from './modules/provides'
+export * from './modules/comment'
+
+
+export type PageParams = {
+    pageNum: number
+    pageSize: number
+}

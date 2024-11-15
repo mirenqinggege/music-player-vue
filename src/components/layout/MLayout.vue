@@ -213,9 +213,14 @@ provide<LayoutProvide>('layout', {
 
   #content {
     overflow: hidden;
+    overflow-y: auto;
     width: 100%;
     height: 100%;
     position: relative;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   #my-song-list {

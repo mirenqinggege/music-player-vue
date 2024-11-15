@@ -77,7 +77,14 @@ const children: Array<RouteRecordRaw> = [
     {
         name: 'lyric',
         path: 'lyric/:id',
-        component: () => import('@/pages/lyric/index.vue')
+        component: () => import('@/pages/lyric/index.vue'),
+        children: [
+            {
+                path: '',
+                name: 'comment',
+                component: () => import('@/pages/comment/index.vue')
+            }
+        ]
     }
 ]
 
