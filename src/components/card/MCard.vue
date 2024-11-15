@@ -1,25 +1,25 @@
 <template>
-<router-link :to="{path: `/play-list/${id}`}" custom>
+  <router-link :to="{path: `/play-list/${id}`}" custom>
     <template v-slot="{navigate}">
-        <div :style="style" class="m-card" @click.stop="navigate">
-            <div class="cover">
-                <slot name="image">
-                    <img :src="image" alt="">
-                </slot>
-            </div>
-            <div class="text">
-                <slot name="text">{{ text }}</slot>
-            </div>
+      <div :style="style" class="m-card" @click.stop="navigate">
+        <div class="cover">
+          <slot name="image">
+            <img :src="image" alt="">
+          </slot>
         </div>
+        <div class="text">
+          <slot name="text">{{ text }}</slot>
+        </div>
+      </div>
     </template>
-</router-link>
+  </router-link>
 </template>
 
 <script lang="ts" setup>
 import {computed} from 'vue'
 
 interface Props {
-  id?: number
+  id?: number | string
   image?: string
   width?: number | string,
   text?: string
@@ -42,6 +42,7 @@ const style = computed(() => ({
   margin-bottom: 15px;
 
   img {
+    aspect-ratio: 1/1;
     width: 100%;
     object-fit: cover;
   }
