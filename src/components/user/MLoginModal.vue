@@ -61,7 +61,7 @@
 <script lang="ts" setup>
 import {reactive, ref, Ref, watchPostEffect} from 'vue'
 import {checkQr, getQrcodeKey, getQrcodeUrl} from '@/api/login'
-import {getCookieStore, getMySongListStore, getRecommendSongListStore} from '@/store'
+import {getCookieStore, getMySongListStore, getRecommendSongListStore, getRecommendStore} from '@/store'
 import {UnwrapNestedRefs} from '@vue/reactivity'
 
 const qrcodeLogin: Ref<boolean> = ref(true)
@@ -83,6 +83,7 @@ const loginFormInstance: UnwrapNestedRefs<LoginForm> = reactive({
 const cookieStore = getCookieStore()
 const mySongListStore = getMySongListStore();
 const recommendSongListStore = getRecommendSongListStore();
+const recommendStore = getRecommendStore();
 
 interface Props {
   show: boolean
@@ -130,6 +131,7 @@ watchPostEffect(() => {
             }).then(() => {
               mySongListStore.fetchMySongList()
               recommendSongListStore.fetchRecommendSongList()
+              recommendStore.fetchSongList()
               alert("登陆成功")
               handlerClose()
             }).catch(({code, message}) => {

@@ -21,4 +21,6 @@ export * from './modules/player'
 
 export * from './modules/playlist'
 
+export * from './modules/recommend'
+
 export default store

@@ -36,7 +36,6 @@ export async function getUserPlayList(): Promise<UserPlayListResponse> {
     await userStore.fetchUserInfo()
   }
   loginUser = userStore.getLoginUser
-  console.log(loginUser?.userId)
   return request(
     'POST',
     'https://music.163.com/api/user/playlist',
