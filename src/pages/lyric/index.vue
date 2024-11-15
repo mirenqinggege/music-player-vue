@@ -10,7 +10,9 @@ const playerStore = getPlayerStore();
 
 const songInfo = computed(() => playerStore.getSongInfo);
 const lyric = shallowRef('')
+const tlyric = shallowRef('')
 const currentLyricIndex = shallowRef(0)
+const showTranslated = shallowRef(false)
 
 function timeToSeconds(timeString: string | undefined): number {
   if (timeString) {
@@ -27,7 +29,7 @@ function timeToSeconds(timeString: string | undefined): number {
   }
 }
 
-const formatedLyric = computed(() => lyric.value.split('\n').map(((item, index) => {
+const formatedLyric = computed(() => (Boolean(tlyric.value) && showTranslated.value ? tlyric : lyric).value.split('\n').map(((item, index) => {
   const strings = item.split(']');
   return {
     index,
@@ -54,11 +56,16 @@ function updateCurrentLyricIndex(time: number, lyric: Array<{ time: number, inde
   currentLyricIndex.value = lyric[right > 0 ? right : 0].index
 }
 
+function handleToggleTranslate() {
+  showTranslated.value = !showTranslated.value
+}
+
 watchPostEffect(() => {
   const id = songInfo.value.id;
   if (id != null) {
     getLyric(id).then((data) => {
       lyric.value = data.lrc.lyric
+      tlyric.value = data.tlyric?.lyric || ''
     })
   }
 })
@@ -78,14 +85,54 @@ onUnmounted(() => {
 <template>
   <div id="lyric-page" class="h-100 overflow-auto">
     <ul class="lyric">
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
       <li :class="['text-center', {active: item.index === currentLyricIndex}]" v-for="item in formatedLyric"
           :data-time="item.time">{{ item.text }}
+      </li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+      <li>&nbsp;</li>
+    </ul>
+    <ul class="control">
+      <li>
+        <div @click="handleToggleTranslate">译</div>
       </li>
     </ul>
   </div>
 </template>
 
 <style scoped lang="less">
+#lyric-page {
+  position: relative;
+
+  .control {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    list-style: none;
+
+    li div {
+      cursor: pointer;
+    }
+  }
+}
+
 ul.lyric {
   scroll-behavior: smooth;
   margin: auto;
