@@ -115,6 +115,7 @@ onUnmounted(() => {
       </li>
     </ul>
   </div>
+  <router-view/>
 </template>
 
 <style scoped lang="less">
