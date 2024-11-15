@@ -18,8 +18,6 @@
 import HoverScrollText from "@/components/common/HoverScrollText.vue";
 import {useRouter} from "vue-router";
 import {getPlayerStore} from "@/store";
-import {inject} from "vue";
-import {LayoutProvide} from "@/types";
 
 interface Props {
   cover: string
@@ -37,11 +35,9 @@ withDefaults(defineProps<Props>(), {
 
 const router = useRouter();
 const playerStore = getPlayerStore();
-const layout = inject<LayoutProvide>('layout');
 
 function handleGoToDetail() {
   const songInfo = playerStore.getSongInfo;
-  layout.toggleSideMenu(false)
   router.push({path: '/lyric/' + songInfo.id})
 }
 </script>

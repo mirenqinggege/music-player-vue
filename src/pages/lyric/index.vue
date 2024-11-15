@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, inject, onUnmounted, shallowRef, watchPostEffect} from "vue";
+import {computed, inject, onMounted, onUnmounted, shallowRef, watchPostEffect} from "vue";
 import {LayoutProvide} from "@/types";
 import {getPlayerStore} from "@/store";
 import {getLyric} from "@/api/song.ts";
@@ -67,14 +67,16 @@ watchPostEffect(() => {
   const currentTime = playerStore.currentTime;
   updateCurrentLyricIndex(currentTime, formatedLyric.value)
 })
-
+onMounted(() => {
+  layout.toggleSideMenu(false)
+})
 onUnmounted(() => {
   layout.toggleSideMenu(true)
 })
 </script>
 
 <template>
-  <div class="h-100 overflow-auto">
+  <div id="lyric-page" class="h-100 overflow-auto">
     <ul class="lyric">
       <li :class="['text-center', {active: item.index === currentLyricIndex}]" v-for="item in formatedLyric"
           :data-time="item.time">{{ item.text }}
@@ -85,17 +87,30 @@ onUnmounted(() => {
 
 <style scoped lang="less">
 ul.lyric {
+  scroll-behavior: smooth;
+  margin: auto;
+  height: 99%;
+  width: 80%;
   list-style: none;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  transition: all 200ms ease;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   li {
     margin-block: 10px;
+    transition: all 200ms linear;
   }
 
   li.active {
     transform: scale(1.3);
     font-weight: bold;
+    scroll-snap-align: center;
   }
 }
 
