@@ -109,8 +109,9 @@ const progress = ref<number>(0)
 const currentTime = ref<string>('00:00')
 const totalTime = ref<string>('00:00')
 
-const executor = newInterval(1000, () => {
+const executor = newInterval(500, () => {
   const {currentTime: currentTime1, duration} = audio
+  playerStore.currentTime = currentTime1
   const progress1 = ((currentTime1 / duration) * 100).toFixed(2)
   const number = parseInt(progress1)
   progress.value = isNaN(number) ? 0 : number

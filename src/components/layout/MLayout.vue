@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="m-layout">
-      <div id="side">
+      <div id="side" :class="{hide: !showSideMenu}">
         <div class="fixed">
           <template v-for="(item) in fixedMenu" :key="item.key">
             <router-link v-slot="{navigate, isActive}" :to="{name: item.routeName}" custom
@@ -69,9 +69,9 @@
 import MStepControl from '@/components/layout/MStepControl.vue'
 import MSearchInput from '@/components/layout/MSearchInput.vue'
 import MWindowControl from '@/components/layout/MWindowControl.vue'
-import {MenuItem, PlayList} from '@/types'
+import {LayoutProvide, MenuItem, PlayList} from '@/types'
 import {getMySongListStore} from '@/store'
-import {computed, ComputedRef, nextTick, onMounted, provide, reactive} from 'vue'
+import {computed, ComputedRef, nextTick, onMounted, provide, reactive, shallowRef} from 'vue'
 import MUserProfile from '@/components/user/MUserProfile.vue'
 import MPlayer from '@/components/player/MPlayer.vue'
 import MSong from '@/components/song/MSong.vue'
@@ -87,6 +87,7 @@ const fixedMenu: MenuItem[] = [
 ]
 
 const mySongListStore = getMySongListStore()
+const showSideMenu = shallowRef(true)
 
 const playlist: ComputedRef<PlayList[]> = computed(() => mySongListStore.getMyCreatedPlaylist)
 
@@ -108,9 +109,16 @@ function handlerProgress() {
 function handlerTimeChange() {
 }
 
+function toggleSideMenu(flag: boolean) {
+  showSideMenu.value = flag
+}
+
 const play = reactive({play: () => undefined})
 
 provide('play', play)
+provide<LayoutProvide>('layout', {
+  toggleSideMenu
+})
 </script>
 
 <style lang="less" scoped>
@@ -146,6 +154,10 @@ provide('play', play)
         flex-shrink: 0;
       }
     }
+  }
+
+  #side.hide {
+    display: none;
   }
 
   #side {

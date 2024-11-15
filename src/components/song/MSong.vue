@@ -1,5 +1,5 @@
 <template>
-  <div class="m-song">
+  <div class="m-song" @click="handleGoToDetail">
     <div v-if="cover" class="cover">
       <img :src="cover" alt="">
     </div>
@@ -16,6 +16,8 @@
 
 <script lang="ts" setup>
 import HoverScrollText from "@/components/common/HoverScrollText.vue";
+import {useRouter} from "vue-router";
+import {getPlayerStore} from "@/store";
 
 interface Props {
   cover: string
@@ -30,6 +32,14 @@ withDefaults(defineProps<Props>(), {
   artist: '',
   liked: false
 })
+
+const router = useRouter();
+const playerStore = getPlayerStore();
+
+function handleGoToDetail() {
+  const songInfo = playerStore.getSongInfo;
+  router.push({path: '/lyric/' + songInfo.id})
+}
 </script>
 
 <style lang="less" scoped>

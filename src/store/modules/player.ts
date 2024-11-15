@@ -11,6 +11,7 @@ interface PlayerStore {
     songTimeLength?: number
     currPlayProgress?: number
     volume: number
+    currentTime: number
 }
 
 const usePlayerStore = defineStore('playerStore', {
@@ -22,7 +23,8 @@ const usePlayerStore = defineStore('playerStore', {
             loop: 'list-order',
             songTimeLength: undefined,
             currPlayProgress: undefined,
-            volume: 0.2
+            volume: 0.2,
+            currentTime: 0
         }
     },
     actions: {
@@ -31,6 +33,7 @@ const usePlayerStore = defineStore('playerStore', {
             this.playStatus = 'stop'
             this.songTimeLength = songInfo.dt
             this.currPlayProgress = 0
+            this.currentTime = 0
         },
         async load(): Promise<string> {
             this.playStatus = 'loading'
@@ -41,6 +44,7 @@ const usePlayerStore = defineStore('playerStore', {
         async stop() {
             this.playStatus = 'stop'
             this.currPlayProgress = 0
+            this.currentTime = 0
         },
         async canplay() {
             this.playStatus = 'canplay'
@@ -66,7 +70,9 @@ const usePlayerStore = defineStore('playerStore', {
         getCurrPlayProgress: (state: PlayerStore) => state.currPlayProgress,
         isCanplay: (state: PlayerStore) => state.songDetail !== undefined && ['canplay', 'pause'].includes(state.playStatus),
         getSongInfo: (state: PlayerStore) => state.songInfo,
-        getLoopMethod: (state: PlayerStore) => state.loop
+        getLoopMethod: (state: PlayerStore) => state.loop,
+        getCurrentTime: (state: PlayerStore) => state.currentTime,
+
     },
     persist: {
         enabled: true,
