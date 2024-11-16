@@ -9,6 +9,7 @@ export * from './modules/song-detail'
 export * from './modules/provides'
 export * from './modules/comment'
 export * from './modules/recommend'
+export * from './modules/search'
 
 
 export type PageParams = {

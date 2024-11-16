@@ -91,6 +91,11 @@ const children: Array<RouteRecordRaw> = [
                 component: () => import('@/pages/comment/index.vue')
             }
         ]
+    },
+    {
+        name: 'search-result',
+        path: 'search/:keyword',
+        component: () => import('@/pages/search/index.vue')
     }
 ]
 
