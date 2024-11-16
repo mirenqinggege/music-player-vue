@@ -55,8 +55,9 @@ function handleLikeComment(commentId: number, flag: boolean) {
 watchPostEffect(() => {
   const songInfo = playerStore.getSongInfo;
   if (songInfo.id) {
-    pageParams.pageNum = 1
-    loadComment()
+    (async () => 1)()
+        .then(i => pageParams.pageNum = i)
+        .then(loadComment)
   }
 })
 </script>
@@ -107,6 +108,10 @@ watchPostEffect(() => {
       margin-block: 20px;
       background-color: #FFFFFD;
       position: relative;
+
+      a {
+        text-decoration: unset;
+      }
 
       &:after {
         content: '';
