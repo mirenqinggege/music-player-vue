@@ -27,7 +27,7 @@ const listData = computed(() => recommendStore.getSongList.map(v => {
 const columns: Column[] = [
   {
     label: '', index: true, align: 'center', width: 64, format: (val, row, index) => {
-      if (row.id !== songInfo.value.id) {
+      if (row.id !== songInfo.value?.id) {
         return h('span', {}, String(index + 1))
       }
       return h(MTablePlayIcon, {})
