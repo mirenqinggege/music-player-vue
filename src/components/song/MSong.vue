@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import HoverScrollText from "@/components/common/HoverScrollText.vue";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {getPlayerStore} from "@/store";
 
 interface Props {
@@ -34,11 +34,14 @@ withDefaults(defineProps<Props>(), {
 })
 
 const router = useRouter();
+const route = useRoute();
 const playerStore = getPlayerStore();
 
 function handleGoToDetail() {
-  const songInfo = playerStore.getSongInfo;
-  router.push({path: '/lyric/' + songInfo.id})
+  if (route.name !== 'lyric') {
+    const songInfo = playerStore.getSongInfo;
+    router.push({path: '/lyric/' + songInfo.id})
+  }
 }
 </script>
 
