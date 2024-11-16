@@ -27,7 +27,7 @@ const allComments = computed(() => {
       empty: list.length === 0,
       total: totalComment.value
     }
-  ]
+  ].filter(v => !v.empty)
 })
 
 function loadComment() {
@@ -64,7 +64,7 @@ watchPostEffect(() => {
 
 <template>
   <div class="comment">
-    <template v-for="listItem in allComments" :key="listItem.label" v-show="!listItem.empty">
+    <template v-for="listItem in allComments" :key="listItem.label">
       <h5>{{ listItem.label }}({{ listItem.total }})</h5>
       <ul>
         <li v-for="item in listItem.list" :key="item.commentId">
