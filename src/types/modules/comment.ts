@@ -63,7 +63,7 @@ export type Decoration = {}
 
 export type Comments = {
     user: CommentUser;
-    beReplied: any[];
+    beReplied: Comments[];
     pendantData?: any;
     showFloorComment?: any;
     status: number;

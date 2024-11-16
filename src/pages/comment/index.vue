@@ -55,8 +55,9 @@ function handleLikeComment(commentId: number, flag: boolean) {
 watchPostEffect(() => {
   const songInfo = playerStore.getSongInfo;
   if (songInfo.id) {
-    pageParams.pageNum = 1
-    loadComment()
+    (async () => 1)()
+        .then(i => pageParams.pageNum = i)
+        .then(loadComment)
   }
 })
 </script>
@@ -64,7 +65,7 @@ watchPostEffect(() => {
 <template>
   <div class="comment">
     <template v-for="listItem in allComments" :key="listItem.label" v-show="!listItem.empty">
-      <h4>{{ listItem.label }}({{ listItem.total }})</h4>
+      <h5>{{ listItem.label }}({{ listItem.total }})</h5>
       <ul>
         <li v-for="item in listItem.list" :key="item.commentId">
           <div class="avatar">
@@ -73,6 +74,10 @@ watchPostEffect(() => {
           <div class="flex-fill">
             <a href="javascript: void 0">{{ item.user.nickname }}</a>:
             {{ item.content }}
+            <div class="replied" v-if="item.beReplied.length > 0">
+              <a href="javascript: void 0">@{{ item.beReplied[0].user.nickname }}</a>:
+              {{ item.beReplied[0].content }}
+            </div>
             <div class="d-flex justify-content-between align-items-center">
               <small>{{ item.timeStr }}</small>
               <div>
@@ -108,6 +113,10 @@ watchPostEffect(() => {
       background-color: #FFFFFD;
       position: relative;
 
+      a {
+        text-decoration: unset;
+      }
+
       &:after {
         content: '';
         position: absolute;
@@ -130,6 +139,14 @@ watchPostEffect(() => {
         width: 42px;
         height: 42px;
         border-radius: 50%;
+      }
+
+      .replied {
+        background-color: #F5F5F3;
+        padding: 6px;
+        border-radius: 6px;
+        margin-block: 4px;
+        color: #898987;
       }
     }
   }
