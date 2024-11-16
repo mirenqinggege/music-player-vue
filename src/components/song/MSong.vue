@@ -56,11 +56,12 @@ function handleGoToDetail() {
     border-radius: 5px;
     overflow: hidden;
     height: 100%;
+    aspect-ratio: 1 / 1;
     border: 1px solid rgb(242, 242, 242);
 
     img {
       height: 100%;
-      width: 100%;
+      aspect-ratio: 1 / 1;
     }
   }
 
