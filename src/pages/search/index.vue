@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
-import {computed, h, inject, onMounted, reactive, shallowRef, watchPostEffect} from "vue";
+import {computed, h, inject, reactive, shallowRef, watchPostEffect} from "vue";
 import PlayAllBtn from "@/components/btns/PlayAllBtn.vue";
 import {PageParams, Track} from "@/types";
 import {search} from "@/api/search.ts";
