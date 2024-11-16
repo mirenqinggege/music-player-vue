@@ -22,11 +22,11 @@ function filter(str: string) {
 const useCookieStore = defineStore('cookieStore', {
     state(): CookieStore {
         return {
-            cookie: null
+            cookie: ''
         }
     },
     actions: {
-        async setCookie(cookie: string | string[]): Promise<void> {
+        setCookie(cookie: string | string[]) {
             if (Array.isArray(cookie)) {
                 return this.setCookie(cookie.join('; '))
             } else {
