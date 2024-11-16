@@ -69,7 +69,7 @@ function addPage(num: number) {
 </script>
 
 <template>
-  <div class="m-pagination">
+  <div class="m-pagination" v-show="total !== 0">
     <div @click="addPage(-1)" class="m-btn prev">
       <svg class="icon" height="12px" version="1.1" viewBox="0 0 1024 1024" width="12px"
            xmlns="http://www.w3.org/2000/svg">
