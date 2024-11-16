@@ -74,6 +74,10 @@ watchPostEffect(() => {
           <div class="flex-fill">
             <a href="javascript: void 0">{{ item.user.nickname }}</a>:
             {{ item.content }}
+            <div class="replied" v-if="item.beReplied.length > 0">
+              <a href="javascript: void 0">@{{ item.beReplied[0].user.nickname }}</a>:
+              {{ item.beReplied[0].content }}
+            </div>
             <div class="d-flex justify-content-between align-items-center">
               <small>{{ item.timeStr }}</small>
               <div>
@@ -135,6 +139,14 @@ watchPostEffect(() => {
         width: 42px;
         height: 42px;
         border-radius: 50%;
+      }
+
+      .replied {
+        background-color: #F5F5F3;
+        padding: 6px;
+        border-radius: 6px;
+        margin-block: 4px;
+        color: #898987;
       }
     }
   }
