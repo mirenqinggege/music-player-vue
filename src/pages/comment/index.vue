@@ -65,7 +65,7 @@ watchPostEffect(() => {
 <template>
   <div class="comment">
     <template v-for="listItem in allComments" :key="listItem.label" v-show="!listItem.empty">
-      <h4>{{ listItem.label }}({{ listItem.total }})</h4>
+      <h5>{{ listItem.label }}({{ listItem.total }})</h5>
       <ul>
         <li v-for="item in listItem.list" :key="item.commentId">
           <div class="avatar">
