@@ -126,9 +126,11 @@ watchPostEffect(() => {
             checkQr(unikey).then((data) => {
               clearInterval(interval)
               interval = undefined
-              return cookieStore.setCookie(data.cookie)
-            }).then(() => {
+              cookieStore.setCookie(data.cookie)
               mySongListStore.fetchMySongList()
+                  .catch(() => mySongListStore.fetchMySongList())
+                  .catch(() => mySongListStore.fetchMySongList())
+                  .catch(() => mySongListStore.fetchMySongList())
               recommendSongListStore.fetchRecommendSongList()
               alert("登陆成功")
               handlerClose()
