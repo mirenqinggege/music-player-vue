@@ -6,6 +6,7 @@ import Index from '@/pages/index.vue'
 import MDiscoverMusic from '@/pages/discover/MDiscoverMusic.vue'
 import MPlayList from '@/pages/playlist/MPlayList.vue'
 import MLayout from '@/components/layout/MLayout.vue'
+import MRecommendList from "@/pages/playlist/MRecommendList.vue";
 
 
 const discoverMusicChild: Array<RouteRecordRaw> = [
@@ -43,6 +44,11 @@ const children: Array<RouteRecordRaw> = [
         redirect: {name: 'recommend'},
         component: MDiscoverMusic,
         children: discoverMusicChild
+    },
+    {
+        name: 'recommend-play-list',
+        path: 'play-list/recommend',
+        component: MRecommendList
     },
     {
         name: 'play-list',
