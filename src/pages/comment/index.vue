@@ -55,6 +55,7 @@ function handleLikeComment(commentId: number, flag: boolean) {
 watchPostEffect(() => {
   const songInfo = playerStore.getSongInfo;
   if (songInfo.id) {
+    pageParams.pageNum = 1
     loadComment()
   }
 })
